@@ -58,6 +58,12 @@ const createOffer = () => {
     return randomArray;
   }
 
+  // const notUniqueFeatures = () => {
+  //   getRandomArray(FEATURES_LIST);
+  // }
+
+
+
   return {
     title: 'Заголовок',
     address: createLocation().x + ', ' + createLocation().y,
@@ -84,5 +90,6 @@ const createAd = () => {
 const ADS_COUNT = 10;
 const arrayAds = new Array(ADS_COUNT).fill(null).map(() => createAd());
 
-// console.log(arrayAds);
+console.log(arrayAds);
+
 

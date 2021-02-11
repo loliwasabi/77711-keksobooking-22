@@ -1,14 +1,8 @@
-import {getRandomInt, getRandomFloat, getRandomArray, getRandomArrayWithUniqueItems} from './util.js';
-
 export {createAuthor, createLocation, createOffer, createAd};
+import {getRandomInt, getRandomFloat, getRandomArray, getRandomNumberWithLeadingZero, getRandomArrayWithUniqueItems} from './util.js';
 
 
 const createAuthor = () => {
-  const getRandomNumberWithLeadingZero = (min, max) => {
-    if (getRandomInt(min, max) < 10) {
-      return '0' + getRandomInt(min, max);
-    }
-  }
   return {
     avatar: 'img/avatars/user' + getRandomNumberWithLeadingZero(1, 8) + '.png',
   };
@@ -52,8 +46,7 @@ const createAd = () => {
 }
 
 const ADS_COUNT = 10;
-// const arrayAds = new Array(ADS_COUNT).fill(null).map(() => createAd());
-console.log(new Array(ADS_COUNT).fill(null).map(() => createAd()));
+new Array(ADS_COUNT).fill(null).map(() => createAd());
 
 
 

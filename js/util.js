@@ -1,4 +1,4 @@
-export {getRandomInt, getRandomFloat, getRandomArray, getRandomArrayWithUniqueItems};
+export {getRandomInt, getRandomFloat, getRandomArray, getRandomNumberWithLeadingZero, getRandomArrayWithUniqueItems};
 
 const getRandomInt = (min, max) => {
   if (min < 0 || max < 0 || min > max) {
@@ -17,6 +17,13 @@ const getRandomFloat = (min, max, symbolsNumber) => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return (Math.random() * (max - min) + min).toFixed(symbolsNumber);
+}
+
+
+const getRandomNumberWithLeadingZero = (min, max) => {
+  if (getRandomInt(min, max) < 10) {
+    return '0' + getRandomInt(min, max);
+  }
 }
 
 

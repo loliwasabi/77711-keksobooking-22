@@ -61,10 +61,10 @@ const getRandomArrayWithUniqueItems = (array) => {
 
 const addDataToField = (componentDom, data, field) => {
   if (componentDom !== null) {
-    if (data == null) {
-      componentDom.remove();
-    } else {
+    if (data) {
       componentDom[field] = data;
+    } else {
+      componentDom.remove();
     }
   }
 }

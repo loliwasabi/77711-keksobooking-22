@@ -1,5 +1,11 @@
 export {createAuthor, createLocation, createOffer, createAd, createAds, typesTranslation};
-import {getRandomInt, getRandomFloat, getRandomArray, getRandomNumberWithLeadingZero, getRandomArrayWithUniqueItems} from './util.js';
+import {
+  getRandomInt,
+  getRandomFloat,
+  getRandomArray,
+  getRandomNumberWithLeadingZero,
+  getRandomArrayWithUniqueItems
+} from './util.js';
 
 
 const createAuthor = () => {
@@ -24,13 +30,29 @@ const typesTranslation = new Map([
 ]);
 
 const createOffer = () => {
-  const checkins = ['12:00', '13:00', '14:00'];
-  const checkouts = ['12:00', '13:00', '14:00'];
-  const features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  const checkins = [
+    '12:00',
+    '13:00',
+    '14:00',
+  ];
+  const checkouts = [
+    '12:00',
+    '13:00',
+    '14:00',
+  ];
+  const features = [
+    'wifi',
+    'dishwasher',
+    'parking',
+    'washer',
+    'elevator',
+    'conditioner',
+  ];
   const photos = [
     'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+    'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+  ];
   const typeKeys = typesTranslation.keys();
   const typeArray = Array.from(typeKeys);
   return {

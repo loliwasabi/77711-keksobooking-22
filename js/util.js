@@ -1,4 +1,11 @@
-export {getRandomInt, getRandomFloat, getRandomArray, getRandomNumberWithLeadingZero, getRandomArrayWithUniqueItems};
+export {
+  getRandomInt,
+  getRandomFloat,
+  getRandomArray,
+  getRandomNumberWithLeadingZero,
+  getRandomArrayWithUniqueItems,
+  addDataToField
+};
 
 const getRandomInt = (min, max) => {
   if (min < 0 || max < 0 || min > max) {
@@ -50,3 +57,19 @@ const getRandomArrayWithUniqueItems = (array) => {
   }
   return resultRandomArrayWithUniqueItems;
 }
+
+
+const addDataToField = (componentDom, data, field) => {
+  if (componentDom !== null) {
+    if (data == null) {
+      componentDom.remove();
+    } else {
+      componentDom[field] = data;
+    }
+  }
+}
+
+
+
+
+

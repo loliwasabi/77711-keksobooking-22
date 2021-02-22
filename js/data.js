@@ -1,4 +1,13 @@
-export {createAuthor, createLocation, createOffer, createAd, createAds, typesTranslation};
+export {
+  createAuthor,
+  createLocation,
+  createOffer,
+  createAd,
+  createAds,
+  typesTranslation,
+  typesAndPriceHousing,
+  timeinHours
+};
 import {
   getRandomInt,
   getRandomFloat,
@@ -7,18 +16,52 @@ import {
   getRandomArrayWithUniqueItems
 } from './util.js';
 
+const MIN_PHOTO_NUMBER = 1;
+const MAX_PHOTO_NUMBER = 8;
+const MIN_PRICE = 0;
+const MAX_PRICE = 100000;
+const MIN_ROOMS = 0;
+const MAX_ROOMS = 100;
+const MIN_GUESTS = 0;
+const MAX_GUESTS = 1000;
+const MIN_X = 35.65000;
+const MAX_X = 35.7000;
+const SYMBOLS_NUMBER_X = 4;
+const MIN_Y = 139.70000;
+const MAX_Y = 139.80000;
+const SYMBOLS_NUMBER_Y = 5;
+
+
+const typesAndPriceHousing = new Map([
+  ['palace', '10 000'],
+  ['flat', '1000'],
+  ['house', '5000'],
+  ['bungalow', '0'],
+]);
+
+const timeinHours = new Map([
+  ['После 12', 'Выезд до 12'],
+  ['После 13', 'Выезд до 13'],
+  ['После 14', 'Выезд до 14'],
+]);
+
+// const timeutHours = new Map([
+//   ['Выезд до 12', 'После 12'],
+//   ['Выезд до 13', 'После 13'],
+//   ['Выезд до 14', 'После 14'],
+// ]);
+
 
 const createAuthor = () => {
   return {
-    avatar: 'img/avatars/user' + getRandomNumberWithLeadingZero(1, 8) + '.png',
+    avatar: 'img/avatars/user' + getRandomNumberWithLeadingZero(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER) + '.png',
   };
 };
 
-
 const createLocation = () => {
   return {
-    x: getRandomFloat(35.65000, 35.7000, 4),
-    y: getRandomFloat(139.70000, 139.80000, 5),
+    x: getRandomFloat(MIN_X, MAX_X, SYMBOLS_NUMBER_X),
+    y: getRandomFloat(MIN_Y, MAX_Y, SYMBOLS_NUMBER_Y),
   };
 };
 
@@ -53,15 +96,17 @@ const createOffer = () => {
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   ];
+
+
   const typeKeys = typesTranslation.keys();
   const typeArray = Array.from(typeKeys);
   return {
     title: 'Заголовок',
     address: createLocation().x + ', ' + createLocation().y,
-    price: getRandomInt(0, 100000),
+    price: getRandomInt(MIN_PRICE, MAX_PRICE),
     type: typeArray[getRandomInt(0, typesTranslation.size - 1)],
-    rooms: getRandomInt(0, 100),
-    guests: getRandomInt(0, 1000),
+    rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
+    guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
     checkin: checkins[getRandomInt(0, checkins.length - 1)],
     checkout: checkouts[getRandomInt(0, checkouts.length - 1)],
     features: getRandomArrayWithUniqueItems(features),

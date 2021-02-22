@@ -1,9 +1,9 @@
-export {mapCanvas, similarAdTemplate, similarAds};
+export {similarAdTemplate, similarAds, domAd};
 import {createAds, typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
 
 
-const mapCanvas = document.querySelector('#map-canvas');
+// const mapCanvas = document.querySelector('#map-canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 const similarAds = createAds();
 const domAd = [];
@@ -59,7 +59,4 @@ similarAds.forEach((singleAd) => {
   domAd.push(adElement);
 });
 
-mapCanvas.appendChild(domAd[0]);
-
-
-
+// mapCanvas.appendChild(domAd[0]);

@@ -1,3 +1,5 @@
+// import {domAd} from './popup';
+
 export {
   createAuthor,
   createLocation,
@@ -30,7 +32,7 @@ const SYMBOLS_NUMBER_X = 4;
 const MIN_Y = 139.70000;
 const MAX_Y = 139.80000;
 const SYMBOLS_NUMBER_Y = 5;
-
+const ADS_COUNT = 10;
 
 const typesAndPriceHousing = new Map([
   ['palace', '10 000'],
@@ -119,5 +121,6 @@ const createAd = () => {
   return Object.assign({}, createAuthor(), createOffer(), createLocation())
 }
 
-const ADS_COUNT = 10;
+
 const createAds = () => new Array(ADS_COUNT).fill(null).map(() => createAd());
+// console.log(createAd())

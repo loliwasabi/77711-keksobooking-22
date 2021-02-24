@@ -1,5 +1,8 @@
+import { singleAd, domAd} from './popup.js';
 export {map};
-import {domAd} from './popup.js';
+//
+// import {getRandomFloat} from './util';
+// import {createAd} from './data.js';
 
 const adForm = document.querySelector('.ad-form');
 adForm.classList.add('ad-form--disabled');
@@ -12,43 +15,42 @@ fieldsetList.forEach(function (fieldset) {
 const mapFilters = document.querySelector('.map__filters');
 mapFilters.classList.add('map__filters--disabled');
 mapFilters.setAttribute('disabled', 'disabled');
-
-
+//
+//
 /* global L:readonly */
 
 const map = L.map('map-canvas')
+  /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
-    console.log('Карта инициализирована')
+    adForm.classList.remove('ad-form--disabled');
+    fieldsetList.forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+      mapFilters.classList.remove('map__filters--disabled');
+      mapFilters.removeAttribute('disabled');
+    });
+
   })
   .setView({
     lat: 35.68091,
     lng: 139.76714,
   }, 9);
 
+/*создаем слой карты */
+
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>', },
 ).addTo(map);
 
-// const marker = L.marker(
-//   {
-//     lat: 35.68091,
-//     lng: 139.76714,
-//   },
-//   {
-//     draggable: true,
-//   },
-// );
-// marker.addTo(map);
-
+/* загружаем иконку для красного маркера */
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
 
+/* задаем положение красного маркера */
 const mainPinMarker = L.marker(
   {
     lat: 35.68091,
@@ -59,43 +61,18 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
-
 mainPinMarker.addTo(map);
 
+/* вывод в консоль новых координат, после того как пользователь закончил передвигать маркер*/
+mainPinMarker.on('moveend', (evt) => {
+  console.log(evt.target.getLatLng());
+});
 
-// const points = [
-//   {
-//     title: 'Футура',
-//     lat: 35.68491,
-//     lng: 139.78914,
-//   },
-//   {
-//     title: 'Шаверма',
-//     lat: 35.64591,
-//     lng: 139.67714,
-//   },
-//   {
-//     title: 'Франк',
-//     lat: 35.68482,
-//     lng: 139.76314,
-//   },
-//   {
-//     title: 'Ginza',
-//     lat: 35.67851,
-//     lng: 139.56714,
-//   },
-// ];
-//
-//
-// const createCustomPopup = (point) => {
-//   const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
-//   const popupElement = balloonTemplate.cloneNode(true);
-//
-//   popupElement.querySelector('.balloon__title').textContent = point.title;
-//   popupElement.querySelector('.balloon__lat-lng').textContent = `Координаты: ${point.lat}, ${point.lng}`;
-//
-//   return popupElement;
-// };
+
+// /* удаляем красный маркер */
+// mainPinMarker.remove();
+
+
 
 
 domAd.forEach((singleAd) => {
@@ -116,10 +93,12 @@ domAd.forEach((singleAd) => {
     },
   );
 
-
   marker
     .addTo(map)
     .bindPopup(
-      domAd(singleAd),
+      createCustomPopup(point),
+      {
+        keepInView: true,
+      },
     );
 });

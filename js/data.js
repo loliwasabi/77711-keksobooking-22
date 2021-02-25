@@ -1,4 +1,10 @@
-// import {domAd} from './popup';
+import {
+  getRandomInt,
+  getRandomFloat,
+  getRandomArray,
+  getRandomNumberWithLeadingZero,
+  getRandomArrayWithUniqueItems
+} from './util.js';
 
 export {
   createAuthor,
@@ -8,15 +14,10 @@ export {
   createAds,
   typesTranslation,
   typesAndPriceHousing,
-  timeinHours
+  timeinHours,
+  timeutHours
 };
-import {
-  getRandomInt,
-  getRandomFloat,
-  getRandomArray,
-  getRandomNumberWithLeadingZero,
-  getRandomArrayWithUniqueItems
-} from './util.js';
+
 
 const MIN_PHOTO_NUMBER = 1;
 const MAX_PHOTO_NUMBER = 8;
@@ -47,19 +48,20 @@ const timeinHours = new Map([
   ['После 14', 'Выезд до 14'],
 ]);
 
-// const timeutHours = new Map([
-//   ['Выезд до 12', 'После 12'],
-//   ['Выезд до 13', 'После 13'],
-//   ['Выезд до 14', 'После 14'],
-// ]);
+const timeutHours = new Map([
+  ['Выезд до 12', 'После 12'],
+  ['Выезд до 13', 'После 13'],
+  ['Выезд до 14', 'После 14'],
+]);
 
-
+/* createAuthor - функция */
 const createAuthor = () => {
   return {
     avatar: 'img/avatars/user' + getRandomNumberWithLeadingZero(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER) + '.png',
   };
 };
 
+/* createLocation - функция */
 const createLocation = () => {
   return {
     x: getRandomFloat(MIN_X, MAX_X, SYMBOLS_NUMBER_X),
@@ -67,6 +69,7 @@ const createLocation = () => {
   };
 };
 
+/* typesTranslation - коллекция */
 const typesTranslation = new Map([
   ['palace', 'Дворец'],
   ['flat', 'Квартира'],
@@ -74,6 +77,7 @@ const typesTranslation = new Map([
   ['bungalow', 'Бунгало'],
 ]);
 
+/* createOffer - функция */
 const createOffer = () => {
   const checkins = [
     '12:00',
@@ -99,9 +103,9 @@ const createOffer = () => {
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   ];
 
-
   const typeKeys = typesTranslation.keys();
   const typeArray = Array.from(typeKeys);
+
   return {
     title: 'Заголовок',
     address: createLocation().x + ', ' + createLocation().y,
@@ -117,10 +121,13 @@ const createOffer = () => {
   };
 };
 
+/* createAd - функция */
 const createAd = () => {
   return Object.assign({}, createAuthor(), createOffer(), createLocation())
 }
 
-
+/* createAds - функция */
 const createAds = () => new Array(ADS_COUNT).fill(null).map(() => createAd());
 // console.log(createAd())
+
+

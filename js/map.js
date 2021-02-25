@@ -1,8 +1,8 @@
-import { singleAd, domAd} from './popup.js';
+import {similarAds} from './popup.js';
+import {createAd} from './data.js';
+
 export {map};
-//
-// import {getRandomFloat} from './util';
-// import {createAd} from './data.js';
+
 
 const adForm = document.querySelector('.ad-form');
 adForm.classList.add('ad-form--disabled');
@@ -15,8 +15,7 @@ fieldsetList.forEach(function (fieldset) {
 const mapFilters = document.querySelector('.map__filters');
 mapFilters.classList.add('map__filters--disabled');
 mapFilters.setAttribute('disabled', 'disabled');
-//
-//
+
 /* global L:readonly */
 
 const map = L.map('map-canvas')
@@ -40,7 +39,8 @@ const map = L.map('map-canvas')
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>', },
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>',
+  },
 ).addTo(map);
 
 /* загружаем иконку для красного маркера */
@@ -73,32 +73,23 @@ mainPinMarker.on('moveend', (evt) => {
 // mainPinMarker.remove();
 
 
+/* загружаем иконку для синего маркера */
+const pinIcon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
 
+console.log(pinIcon)
 
-domAd.forEach((singleAd) => {
-  const {lat, lng} = singleAd;
-  const icon = L.icon({
-    iconUrl: './img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+similarAds.forEach(createOffer => {
+  const marker = L.marker({
+    lat: createOffer.x,
+    lng: createOffer.y,
+  }, {
+    pinIcon,
   });
 
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon,
-    },
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(
-      createCustomPopup(point),
-      {
-        keepInView: true,
-      },
-    );
+  marker.addTo(map)
+    .bindPopup(createAd(createOffer));
 });

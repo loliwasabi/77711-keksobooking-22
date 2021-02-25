@@ -2,41 +2,54 @@ export {similarAdTemplate, similarAds, domAd};
 import {createAds, typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
 
-
-// const mapCanvas = document.querySelector('#map-canvas');
+/* similarAdTemplate - ?  */
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
+
+/* similarAds - массив  */
 const similarAds = createAds();
+
+/* domAd - массив  */
 const domAd = [];
 
+/* similarAds - ? singleAd - ? adElement - ? addDataToField - ? */
 similarAds.forEach((singleAd) => {
   const adElement = similarAdTemplate.cloneNode(true);
+
 
   const popupTitle = adElement.querySelector('.popup__title');
   addDataToField(popupTitle, singleAd.title, 'textContent');
 
+
   const popupAddress = adElement.querySelector('.popup__text--address');
   addDataToField(popupAddress, singleAd.address, 'textContent');
+
 
   const popupPrice = adElement.querySelector('.popup__text--price');
   addDataToField(popupPrice, `${singleAd.price} ₽/ночь`, 'textContent');
 
+
   const popupCapacity = adElement.querySelector('.popup__text--capacity');
   addDataToField(popupCapacity, `${singleAd.rooms} комнаты для ${singleAd.guests} гостей`, 'textContent');
+
 
   const popupTime = adElement.querySelector('.popup__text--time');
   addDataToField(popupTime, `Заезд после ${singleAd.checkin}, выезд до ${singleAd.checkout}`, 'textContent');
 
+
   const popupDescription = adElement.querySelector('.popup__description');
   addDataToField(popupDescription, singleAd.description, 'textContent');
 
+
   const popupAvatar = adElement.querySelector('.popup__avatar');
   addDataToField(popupAvatar, singleAd.avatar, 'src');
+
 
   const popupType = adElement.querySelector('.popup__type');
   popupType.innerHTML = '';
   let typeTranslated;
   typeTranslated = typesTranslation.get(singleAd.type);
   addDataToField(popupType, typeTranslated, 'textContent');
+
 
   const featureContainer = adElement.querySelector('.popup__features');
   featureContainer.innerHTML = '';
@@ -47,6 +60,7 @@ similarAds.forEach((singleAd) => {
   }
   addDataToField(featureContainer, featuresListContent, 'innerHTML');
 
+
   const photoContainer = adElement.querySelector('.popup__photos');
   photoContainer.innerHTML = '';
   const photoList = singleAd.photos;
@@ -56,7 +70,7 @@ similarAds.forEach((singleAd) => {
   }
   addDataToField(photoContainer, photoListContent, 'innerHTML')
 
+
   domAd.push(adElement);
 });
 
-// mapCanvas.appendChild(domAd[0]);

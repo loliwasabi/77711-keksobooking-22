@@ -10,8 +10,8 @@ export {
   createAuthor,
   createLocation,
   createOffer,
-  createAd,
-  createAds,
+  createAdData,
+  createAdDataList,
   typesTranslation,
   typesAndPriceHousing,
   timeinHours,
@@ -122,12 +122,17 @@ const createOffer = () => {
 };
 
 /* createAd - функция */
-const createAd = () => {
-  return Object.assign({}, createAuthor(), createOffer(), createLocation())
+const createAdData = () => {
+  // return Object.assign({}, createAuthor(), createOffer(), createLocation())
+  return {
+    author: createAuthor(),
+    location: createLocation(),
+    offer: createOffer(),
+  }
 }
 
 /* createAds - функция */
-const createAds = () => new Array(ADS_COUNT).fill(null).map(() => createAd());
+const createAdDataList = () => new Array(ADS_COUNT).fill(null).map(() => createAdData());
 // console.log(createAd())
 
 

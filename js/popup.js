@@ -1,76 +1,76 @@
-export {similarAdTemplate, similarAds, domAd};
-import {createAds, typesTranslation} from './data.js';
+export {adTemplate, adDataList, domAdList};
+import {createAdDataList, typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
 
-/* similarAdTemplate - ?  */
-const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
+/* adTemplate - ?  */
+const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 /* similarAds - массив  */
-const similarAds = createAds();
+const adDataList = createAdDataList();
 
 /* domAd - массив  */
-const domAd = [];
+const domAdList = [];
 
 /* similarAds - ? singleAd - ? adElement - ? addDataToField - ? */
-similarAds.forEach((singleAd) => {
-  const adElement = similarAdTemplate.cloneNode(true);
+adDataList.forEach((adDataParam) => {
+  const domAdTemplate = adTemplate.cloneNode(true);
 
 
-  const popupTitle = adElement.querySelector('.popup__title');
-  addDataToField(popupTitle, singleAd.title, 'textContent');
+  const popupTitle = domAdTemplate.querySelector('.popup__title');
+  addDataToField(popupTitle, adDataParam.offer.title, 'textContent');
 
 
-  const popupAddress = adElement.querySelector('.popup__text--address');
-  addDataToField(popupAddress, singleAd.address, 'textContent');
+  const popupAddress = domAdTemplate.querySelector('.popup__text--address');
+  addDataToField(popupAddress, adDataParam.offer.address, 'textContent');
 
 
-  const popupPrice = adElement.querySelector('.popup__text--price');
-  addDataToField(popupPrice, `${singleAd.price} ₽/ночь`, 'textContent');
+  const popupPrice = domAdTemplate.querySelector('.popup__text--price');
+  addDataToField(popupPrice, `${adDataParam.offer.price} ₽/ночь`, 'textContent');
 
 
-  const popupCapacity = adElement.querySelector('.popup__text--capacity');
-  addDataToField(popupCapacity, `${singleAd.rooms} комнаты для ${singleAd.guests} гостей`, 'textContent');
+  const popupCapacity = domAdTemplate.querySelector('.popup__text--capacity');
+  addDataToField(popupCapacity, `${adDataParam.offer.rooms} комнаты для ${adDataParam.offer.guests} гостей`, 'textContent');
 
 
-  const popupTime = adElement.querySelector('.popup__text--time');
-  addDataToField(popupTime, `Заезд после ${singleAd.checkin}, выезд до ${singleAd.checkout}`, 'textContent');
+  const popupTime = domAdTemplate.querySelector('.popup__text--time');
+  addDataToField(popupTime, `Заезд после ${adDataParam.offer.checkin}, выезд до ${adDataParam.offer.checkout}`, 'textContent');
 
 
-  const popupDescription = adElement.querySelector('.popup__description');
-  addDataToField(popupDescription, singleAd.description, 'textContent');
+  const popupDescription = domAdTemplate.querySelector('.popup__description');
+  addDataToField(popupDescription, adDataParam.offer.description, 'textContent');
 
 
-  const popupAvatar = adElement.querySelector('.popup__avatar');
-  addDataToField(popupAvatar, singleAd.avatar, 'src');
+  const popupAvatar = domAdTemplate.querySelector('.popup__avatar');
+  addDataToField(popupAvatar, adDataParam.author.avatar, 'src');
 
 
-  const popupType = adElement.querySelector('.popup__type');
+  const popupType = domAdTemplate.querySelector('.popup__type');
   popupType.innerHTML = '';
   let typeTranslated;
-  typeTranslated = typesTranslation.get(singleAd.type);
+  typeTranslated = typesTranslation.get(adDataParam.offer.type);
   addDataToField(popupType, typeTranslated, 'textContent');
 
 
-  const featureContainer = adElement.querySelector('.popup__features');
-  featureContainer.innerHTML = '';
-  const featuresList = singleAd.features;
+  const featureDomContainer = domAdTemplate.querySelector('.popup__features');
+  featureDomContainer.innerHTML = '';
+  const featuresDataList = adDataParam.offer.features;
   let featuresListContent = '';
-  for (let i = 0; i < featuresList.length; i++) {
-    featuresListContent = featuresListContent.concat(`<li class="popup__feature popup__feature--${featuresList[i]}"></li>`);
+  for (let i = 0; i < featuresDataList.length; i++) {
+    featuresListContent = featuresListContent.concat(`<li class="popup__feature popup__feature--${featuresDataList[i]}"></li>`);
   }
-  addDataToField(featureContainer, featuresListContent, 'innerHTML');
+  addDataToField(featureDomContainer, featuresListContent, 'innerHTML');
 
 
-  const photoContainer = adElement.querySelector('.popup__photos');
-  photoContainer.innerHTML = '';
-  const photoList = singleAd.photos;
+  const photoDomContainer = domAdTemplate.querySelector('.popup__photos');
+  photoDomContainer.innerHTML = '';
+  const photoDataList = adDataParam.offer.photos;
   let photoListContent = '';
-  for (let i = 0; i < photoList.length; i++) {
-    photoListContent = photoListContent.concat(`<img src="${photoList[i]}" class="popup__photo" width="45" height="40" alt="Фотография жилья"></li>`);
+  for (let i = 0; i < photoDataList.length; i++) {
+    photoListContent = photoListContent.concat(`<img src="${photoDataList[i]}" class="popup__photo" width="45" height="40" alt="Фотография жилья"></li>`);
   }
-  addDataToField(photoContainer, photoListContent, 'innerHTML')
+  addDataToField(photoDomContainer, photoListContent, 'innerHTML')
 
 
-  domAd.push(adElement);
+  domAdList.push(domAdTemplate);
 });
 

@@ -1,5 +1,4 @@
-import {similarAds} from './popup.js';
-import {createAd} from './data.js';
+import {adDataList, domAdList} from './popup.js';
 
 export {map};
 
@@ -82,14 +81,18 @@ const pinIcon = L.icon({
 
 console.log(pinIcon)
 
-similarAds.forEach(createOffer => {
+adDataList.forEach((adData, i) => {
+  console.log( adData)
   const marker = L.marker({
-    lat: createOffer.x,
-    lng: createOffer.y,
+    lat: adData.location.x,
+    lng: adData.location.y,
   }, {
     pinIcon,
   });
 
   marker.addTo(map)
-    .bindPopup(createAd(createOffer));
+    .bindPopup(domAdList[i]);
+
+
+
 });

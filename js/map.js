@@ -2,21 +2,26 @@ import {adDataList, domAdList} from './popup.js';
 
 export {map};
 
-
 const adForm = document.querySelector('.ad-form');
+const fieldsetList = adForm.querySelectorAll('fieldset');
+const mapFilters = document.querySelector('.map__filters');
+const popupAddressField = document.querySelector('#address');
+const SYMBOLS_NUMBER = 5;
+
+
 adForm.classList.add('ad-form--disabled');
 
-const fieldsetList = adForm.querySelectorAll('fieldset');
+
 fieldsetList.forEach(function (fieldset) {
   fieldset.setAttribute('disabled', 'disabled');
 });
 
-const mapFilters = document.querySelector('.map__filters');
+
 mapFilters.classList.add('map__filters--disabled');
 mapFilters.setAttribute('disabled', 'disabled');
 
-/* global L:readonly */
 
+/* global L:readonly */
 const map = L.map('map-canvas')
   /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
@@ -25,16 +30,16 @@ const map = L.map('map-canvas')
       fieldset.removeAttribute('disabled');
       mapFilters.classList.remove('map__filters--disabled');
       mapFilters.removeAttribute('disabled');
+      popupAddressField.setAttribute('readonly', 'readonly');
     });
-
   })
   .setView({
     lat: 35.68091,
     lng: 139.76714,
   }, 9);
 
-/*создаем слой карты */
 
+/*создаем слой карты */
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -42,12 +47,14 @@ L.tileLayer(
   },
 ).addTo(map);
 
+
 /* загружаем иконку для красного маркера */
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
+
 
 /* задаем положение красного маркера */
 const mainPinMarker = L.marker(
@@ -62,14 +69,15 @@ const mainPinMarker = L.marker(
 );
 mainPinMarker.addTo(map);
 
-/* вывод в консоль новых координат, после того как пользователь закончил передвигать маркер*/
+
+/* содержание поля с адресом по умолчанию - центр Токио */
+popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + mainPinMarker.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
+
+
+/* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
 mainPinMarker.on('moveend', (evt) => {
-  console.log(evt.target.getLatLng());
+  popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
 });
-
-
-// /* удаляем красный маркер */
-// mainPinMarker.remove();
 
 
 /* загружаем иконку для синего маркера */
@@ -79,20 +87,23 @@ const pinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
-console.log(pinIcon)
 
 adDataList.forEach((adData, i) => {
-  console.log( adData)
   const marker = L.marker({
     lat: adData.location.x,
     lng: adData.location.y,
   }, {
-    pinIcon,
+    draggable: true,
+    icon: pinIcon,
   });
 
+
   marker.addTo(map)
-    .bindPopup(domAdList[i]);
-
-
-
+    .bindPopup(domAdList[i],
+      {
+        keepInView: true,
+      },
+    );
 });
+
+

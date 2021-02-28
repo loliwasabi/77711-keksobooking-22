@@ -36,7 +36,7 @@ const SYMBOLS_NUMBER_Y = 5;
 const ADS_COUNT = 10;
 
 const typesAndPriceHousing = new Map([
-  ['palace', '10 000'],
+  ['palace', '10000'],
   ['flat', '1000'],
   ['house', '5000'],
   ['bungalow', '0'],
@@ -54,14 +54,14 @@ const timeutHours = new Map([
   ['Выезд до 14', 'После 14'],
 ]);
 
-/* createAuthor - функция */
+
 const createAuthor = () => {
   return {
     avatar: 'img/avatars/user' + getRandomNumberWithLeadingZero(MIN_PHOTO_NUMBER, MAX_PHOTO_NUMBER) + '.png',
   };
 };
 
-/* createLocation - функция */
+
 const createLocation = () => {
   return {
     x: getRandomFloat(MIN_X, MAX_X, SYMBOLS_NUMBER_X),
@@ -69,7 +69,7 @@ const createLocation = () => {
   };
 };
 
-/* typesTranslation - коллекция */
+
 const typesTranslation = new Map([
   ['palace', 'Дворец'],
   ['flat', 'Квартира'],
@@ -77,7 +77,7 @@ const typesTranslation = new Map([
   ['bungalow', 'Бунгало'],
 ]);
 
-/* createOffer - функция */
+
 const createOffer = () => {
   const checkins = [
     '12:00',
@@ -121,9 +121,8 @@ const createOffer = () => {
   };
 };
 
-/* createAd - функция */
+
 const createAdData = () => {
-  // return Object.assign({}, createAuthor(), createOffer(), createLocation())
   return {
     author: createAuthor(),
     location: createLocation(),
@@ -131,8 +130,8 @@ const createAdData = () => {
   }
 }
 
-/* createAds - функция */
+
 const createAdDataList = () => new Array(ADS_COUNT).fill(null).map(() => createAdData());
-// console.log(createAd())
+
 
 

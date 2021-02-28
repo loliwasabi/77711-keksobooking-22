@@ -2,16 +2,16 @@ export {adTemplate, adDataList, domAdList};
 import {createAdDataList, typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
 
-/* adTemplate - ?  */
+
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-/* similarAds - массив  */
+
 const adDataList = createAdDataList();
 
-/* domAd - массив  */
+
 const domAdList = [];
 
-/* similarAds - ? singleAd - ? adElement - ? addDataToField - ? */
+
 adDataList.forEach((adDataParam) => {
   const domAdTemplate = adTemplate.cloneNode(true);
 

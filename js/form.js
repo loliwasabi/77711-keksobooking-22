@@ -1,4 +1,5 @@
 import {typesAndPriceHousing} from './data.js';
+import {postFetchAds} from './api.js';
 
 const adForm = document.querySelector('.ad-form');
 
@@ -42,5 +43,8 @@ typeFormField.addEventListener('change', (evt) => {
 
 
 
-
-
+/* обработчик отправки формы */
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  postFetchAds();
+})

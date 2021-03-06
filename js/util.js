@@ -4,7 +4,8 @@ export {
   getRandomArray,
   getRandomNumberWithLeadingZero,
   getRandomArrayWithUniqueItems,
-  addDataToField
+  addDataToField,
+  onFail
 };
 
 const getRandomInt = (min, max) => {
@@ -69,7 +70,28 @@ const addDataToField = (componentDom, data, field) => {
   }
 }
 
+/* global _:readonly */
+const ONFAIL_SHOW_TIME = 5000;
+const onFail = (message) => {
+  const onFailContainer = document.createElement('div');
+  onFailContainer.style.zIndex = 100;
+  onFailContainer.style.position = 'absolute';
+  onFailContainer.style.left = 0;
+  onFailContainer.style.top = 0;
+  onFailContainer.style.right = 0;
+  onFailContainer.style.padding = '10px 3px';
+  onFailContainer.style.fontSize = '30px';
+  onFailContainer.style.textAlign = 'center';
+  onFailContainer.style.backgroundColor = 'red';
 
+  onFailContainer.textContent = message;
+
+  document.body.append(onFailContainer);
+
+  setTimeout(() => {
+    onFailContainer.remove();
+  }, ONFAIL_SHOW_TIME);
+}
 
 
 

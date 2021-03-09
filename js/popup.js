@@ -1,7 +1,7 @@
-import {createBaloon} from './map.js';
+import {createBalloon} from './map.js';
 import {typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
-import {fetchAds} from './api.js'
+import {getFetchAds, onFailGetFetchAds} from './api.js'
 
 export {adTemplate, domAdList, adDataList};
 
@@ -12,7 +12,7 @@ let adDataList;
 const domAdList = [];
 
 
-const responsePromise = fetchAds();
+const responsePromise = getFetchAds(onFailGetFetchAds);
 responsePromise.then((responseAd) => {
 
   adDataList = responseAd;
@@ -77,6 +77,6 @@ responsePromise.then((responseAd) => {
 
     domAdList.push(domAdTemplate);
 
-    createBaloon();
+    createBalloon();
   });
 });

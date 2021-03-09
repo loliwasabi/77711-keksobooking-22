@@ -1,5 +1,7 @@
 import {typesAndPriceHousing} from './data.js';
 import {postFetchAds} from './api.js';
+import {onFailPostFetchAds, onSuccess, resetData} from './util.js';
+
 
 const adForm = document.querySelector('.ad-form');
 
@@ -42,9 +44,26 @@ typeFormField.addEventListener('change', (evt) => {
 // });
 
 
-
 /* обработчик отправки формы */
-adForm.addEventListener('submit', (evt) => {
+
+const setUserFormSubmit =
+  () => {
+    adForm.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+
+      postFetchAds(
+        onSuccess,
+        resetData,
+        onFailPostFetchAds,
+        new FormData(evt.target),
+      );
+    });
+  };
+export {setUserFormSubmit};
+
+
+const resetButton = document.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', function (evt) {
   evt.preventDefault();
-  postFetchAds();
-})
+  resetData();
+});

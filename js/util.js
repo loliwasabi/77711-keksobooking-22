@@ -5,7 +5,10 @@ export {
   getRandomNumberWithLeadingZero,
   getRandomArrayWithUniqueItems,
   addDataToField,
-  onFail
+  onFailGetFetchAds,
+  onSuccess,
+  onFailPostFetchAds,
+  resetData
 };
 
 const getRandomInt = (min, max) => {
@@ -70,9 +73,9 @@ const addDataToField = (componentDom, data, field) => {
   }
 }
 
-/* global _:readonly */
+// /* global _:readonly */
 const ONFAIL_SHOW_TIME = 5000;
-const onFail = (message) => {
+const onFailGetFetchAds = (message) => {
   const onFailContainer = document.createElement('div');
   onFailContainer.style.zIndex = 100;
   onFailContainer.style.position = 'absolute';
@@ -83,7 +86,6 @@ const onFail = (message) => {
   onFailContainer.style.fontSize = '30px';
   onFailContainer.style.textAlign = 'center';
   onFailContainer.style.backgroundColor = 'red';
-
   onFailContainer.textContent = message;
 
   document.body.append(onFailContainer);
@@ -93,5 +95,34 @@ const onFail = (message) => {
   }, ONFAIL_SHOW_TIME);
 }
 
+const onSuccess = () => {
+  const successPostPopup = document.createElement('div');
+  const successPostTemplate = document.querySelector('#success');
+  successPostPopup.append(successPostTemplate.content.cloneNode(true));
+  document.body.append(successPostPopup);
+  document.querySelector('.success').style.zIndex = '10000';
+  // successPostPopup.addEventListener('click', function (evt) {
+  //   if (evt.key === ('Escape' || 'Esc')) {
+  //     successPostPopup.classList.add('hidden');
+  //   }
+  // });
 
+
+}
+
+const adForm = document.querySelector('.ad-form');
+const resetData = () => {
+  adForm.reset();
+}
+
+
+
+const onFailPostFetchAds = () => {
+  const failPostPopup = document.createElement('div');
+  const FailPostTemplate = document.querySelector('#error');
+  failPostPopup.append(FailPostTemplate.content.cloneNode(true));
+  document.body.append(failPostPopup);
+  document.querySelector('.error').style.zIndex = '10000';
+
+}
 

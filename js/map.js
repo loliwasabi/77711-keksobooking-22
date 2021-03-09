@@ -1,6 +1,6 @@
 import {adDataList, domAdList} from './popup.js';
 
-export {map, popupAddressField, pinIcon, createBaloon};
+export {map, popupAddressField, pinIcon, createBalloon};
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetList = adForm.querySelectorAll('fieldset');
@@ -33,7 +33,6 @@ const map = L.map('map-canvas')
     lat: 35.68091,
     lng: 139.76714,
   }, 9);
-
 
 /*создаем слой карты */
 L.tileLayer(
@@ -83,7 +82,7 @@ const pinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
-const createBaloon = () => {
+const createBalloon = () => {
   adDataList.forEach((adData, i) => {
     const marker = L.marker({
       lat: adData.location.lat,

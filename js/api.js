@@ -11,13 +11,11 @@ const getFetchAds = (onFailGetFetchAds) => {
   )
     .then((response) => {
       if (response.ok) {
-        console.log('ok get');
         return response.json();
       }
       throw new Error(`${response.status} ${response.statusText}`);
     })
     .catch(() => {
-      console.log('error get');
       onFailGetFetchAds('При загрузке данных с сервера произошла ошибка запроса');
     });
 }
@@ -31,11 +29,9 @@ const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
   )
     .then((response) => {
       if (response.ok) {
-        console.log('ok post')
         onSuccess()
         resetData();
       } else {
-        console.log('error post');
         onFailPostFetchAds();
       }
     })

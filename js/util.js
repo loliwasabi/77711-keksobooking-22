@@ -73,7 +73,6 @@ const addDataToField = (componentDom, data, field) => {
   }
 }
 
-// /* global _:readonly */
 const ONFAIL_SHOW_TIME = 5000;
 const onFailGetFetchAds = (message) => {
   const onFailContainer = document.createElement('div');
@@ -95,20 +94,38 @@ const onFailGetFetchAds = (message) => {
   }, ONFAIL_SHOW_TIME);
 }
 
+
 const onSuccess = () => {
   const successPostPopup = document.createElement('div');
+  successPostPopup.setAttribute('id', 'success');
   const successPostTemplate = document.querySelector('#success');
+
   successPostPopup.append(successPostTemplate.content.cloneNode(true));
   document.body.append(successPostPopup);
   document.querySelector('.success').style.zIndex = '10000';
-  // successPostPopup.addEventListener('click', function (evt) {
-  //   if (evt.key === ('Escape' || 'Esc')) {
-  //     successPostPopup.classList.add('hidden');
-  //   }
-  // });
+
+  const removeSuccessPopup = () => {
+    document.querySelector('#success').remove();
+  }
 
 
+  const onEscClickSuccess = (evt) => {
+    if (evt.key === ('Escape' || 'Esc')) {
+      evt.preventDefault();
+      removeSuccessPopup();
+      document.removeEventListener('keydown', onEscClickSuccess, false);
+    }
+  }
+
+  document.addEventListener('keydown', onEscClickSuccess);
+
+
+  successPostPopup.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    removeSuccessPopup();
+  })
 }
+
 
 const adForm = document.querySelector('.ad-form');
 const resetData = () => {
@@ -116,13 +133,41 @@ const resetData = () => {
 }
 
 
-
 const onFailPostFetchAds = () => {
   const failPostPopup = document.createElement('div');
+  failPostPopup.setAttribute('id', 'fail');
   const FailPostTemplate = document.querySelector('#error');
+  const errorButton = document.querySelector('.error__button');
+
   failPostPopup.append(FailPostTemplate.content.cloneNode(true));
   document.body.append(failPostPopup);
   document.querySelector('.error').style.zIndex = '10000';
 
-}
+  const removeFailPopup = () => {
+    document.querySelector('#fail').remove();
+  }
 
+
+  const onEscClickFail = (evt) => {
+    if (evt.key === ('Escape' || 'Esc')) {
+      evt.preventDefault();
+      removeFailPopup();
+      document.removeEventListener('keydown', onEscClickFail, false);
+    }
+  }
+
+  document.addEventListener('keydown', onEscClickFail);
+
+
+  failPostPopup.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    removeFailPopup();
+  })
+
+  if (errorButton) {
+    errorButton.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      removeFailPopup();
+    });
+  }
+}

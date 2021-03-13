@@ -14,8 +14,7 @@ export {
   createAdDataList,
   typesTranslation,
   typesAndPriceHousing,
-  timeinHours,
-  timeutHours
+  timeHours
 };
 
 
@@ -40,18 +39,6 @@ const typesAndPriceHousing = new Map([
   ['flat', '1000'],
   ['house', '5000'],
   ['bungalow', '0'],
-]);
-
-const timeinHours = new Map([
-  ['После 12', 'Выезд до 12'],
-  ['После 13', 'Выезд до 13'],
-  ['После 14', 'Выезд до 14'],
-]);
-
-const timeutHours = new Map([
-  ['Выезд до 12', 'После 12'],
-  ['Выезд до 13', 'После 13'],
-  ['Выезд до 14', 'После 14'],
 ]);
 
 

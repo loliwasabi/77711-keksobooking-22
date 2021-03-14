@@ -4,7 +4,11 @@ export {
   getRandomArray,
   getRandomNumberWithLeadingZero,
   getRandomArrayWithUniqueItems,
-  addDataToField
+  addDataToField,
+  onFailGetFetchAds,
+  onSuccess,
+  onFailPostFetchAds,
+  resetData
 };
 
 const getRandomInt = (min, max) => {
@@ -72,4 +76,103 @@ const addDataToField = (componentDom, data, field) => {
 
 
 
+const ONFAIL_SHOW_TIME = 5000;
+const onFailGetFetchAds = (message) => {
+  const onFailContainer = document.createElement('div');
+  onFailContainer.style.zIndex = 100;
+  onFailContainer.style.position = 'absolute';
+  onFailContainer.style.left = 0;
+  onFailContainer.style.top = 0;
+  onFailContainer.style.right = 0;
+  onFailContainer.style.padding = '10px 3px';
+  onFailContainer.style.fontSize = '30px';
+  onFailContainer.style.textAlign = 'center';
+  onFailContainer.style.backgroundColor = 'red';
+  onFailContainer.textContent = message;
 
+  document.body.append(onFailContainer);
+
+  setTimeout(() => {
+    onFailContainer.remove();
+  }, ONFAIL_SHOW_TIME);
+}
+
+
+
+
+const onEscClickSuccess = (evt) => {
+  if (evt.key === ('Escape' || 'Esc')) {
+    evt.preventDefault();
+  }
+}
+document.addEventListener('keydown', onEscClickSuccess);
+
+const onSuccess = () => {
+  const successPostPopup = document.createElement('div');
+  successPostPopup.setAttribute('id', 'successResponse');
+
+  const successPostTemplate = document.querySelector('#success');
+  successPostPopup.append(successPostTemplate.content.cloneNode(true));
+  document.body.append(successPostPopup);
+  document.querySelector('.success').style.zIndex = '10000';
+
+  const removeSuccessPopup = () => {
+    const successEl = document.querySelector('#successResponse');
+    successEl.remove();
+  }
+
+  successPostPopup.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    removeSuccessPopup();
+  })
+}
+
+
+
+
+const adForm = document.querySelector('.ad-form');
+const resetData = () => {
+  adForm.reset();
+}
+
+
+
+
+const removeFailPopup = () => {
+  const failEl = document.querySelector('#fail');
+  if (failEl) {
+    failEl.remove();
+  }
+}
+
+const onEscClickFail = (evt) => {
+  if (evt.key === ('Escape' || 'Esc')) {
+    evt.preventDefault();
+    removeFailPopup();
+  }
+}
+document.addEventListener('keydown', onEscClickFail);
+
+const onFailPostFetchAds = () => {
+  const failPostPopup = document.createElement('div');
+  failPostPopup.setAttribute('id', 'fail');
+
+  const FailPostTemplate = document.querySelector('#error');
+  const errorButton = document.querySelector('.error__button');
+
+  failPostPopup.append(FailPostTemplate.content.cloneNode(true));
+  document.body.append(failPostPopup);
+  document.querySelector('.error').style.zIndex = '10000';
+
+  failPostPopup.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    removeFailPopup();
+  })
+
+  if (errorButton) {
+    errorButton.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      removeFailPopup();
+    });
+  }
+}

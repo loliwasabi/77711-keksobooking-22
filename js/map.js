@@ -1,6 +1,6 @@
 import {adDataList, domAdList} from './popup.js';
 
-export {map};
+export {map, popupAddressField, pinIcon, createBalloon};
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetList = adForm.querySelectorAll('fieldset');
@@ -8,14 +8,10 @@ const mapFilters = document.querySelector('.map__filters');
 const popupAddressField = document.querySelector('#address');
 const SYMBOLS_NUMBER = 5;
 
-
 adForm.classList.add('ad-form--disabled');
-
-
 fieldsetList.forEach(function (fieldset) {
   fieldset.setAttribute('disabled', 'disabled');
 });
-
 
 mapFilters.classList.add('map__filters--disabled');
 mapFilters.setAttribute('disabled', 'disabled');
@@ -37,7 +33,6 @@ const map = L.map('map-canvas')
     lat: 35.68091,
     lng: 139.76714,
   }, 9);
-
 
 /*создаем слой карты */
 L.tileLayer(
@@ -87,23 +82,26 @@ const pinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
+const createBalloon = () => {
+  adDataList.forEach((adData, i) => {
+    const marker = L.marker({
+      lat: adData.location.lat,
+      lng: adData.location.lng,
+    }, {
+      draggable: true,
+      icon: pinIcon,
+    });
 
-adDataList.forEach((adData, i) => {
-  const marker = L.marker({
-    lat: adData.location.x,
-    lng: adData.location.y,
-  }, {
-    draggable: true,
-    icon: pinIcon,
+
+    marker.addTo(map)
+      .bindPopup(domAdList[i],
+        {
+          keepInView: true,
+        },
+      );
   });
+}
 
 
-  marker.addTo(map)
-    .bindPopup(domAdList[i],
-      {
-        keepInView: true,
-      },
-    );
-});
 
 

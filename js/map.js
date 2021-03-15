@@ -1,6 +1,5 @@
 import {adDataList, domAdList} from './popup.js';
-
-export {map, popupAddressField, pinIcon, createBalloon};
+import {CENTER_COORDINATES} from './data.js';
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetList = adForm.querySelectorAll('fieldset');
@@ -53,10 +52,7 @@ const mainPinIcon = L.icon({
 
 /* задаем положение красного маркера */
 const mainPinMarker = L.marker(
-  {
-    lat: 35.68091,
-    lng: 139.76714,
-  },
+  CENTER_COORDINATES,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -103,5 +99,5 @@ const createBalloon = () => {
 }
 
 
-
+export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon};
 

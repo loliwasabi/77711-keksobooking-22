@@ -1,7 +1,5 @@
 import {onFailGetFetchAds} from './util.js';
 
-export {getFetchAds, postFetchAds, onFailGetFetchAds};
-
 const getFetchAds = (onFailGetFetchAds) => {
   return fetch('https://22.javascript.pages.academy/keksobooking/data',
     {
@@ -42,3 +40,4 @@ const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
 
 
 
+export {getFetchAds, postFetchAds, onFailGetFetchAds};

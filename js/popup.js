@@ -3,9 +3,6 @@ import {typesTranslation} from './data.js';
 import {addDataToField} from './util.js';
 import {getFetchAds, onFailGetFetchAds} from './api.js'
 
-export {adTemplate, domAdList, adDataList};
-
-
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 let adDataList;
@@ -80,3 +77,5 @@ responsePromise.then((responseAd) => {
     createBalloon();
   });
 });
+
+export {adTemplate, domAdList, adDataList};

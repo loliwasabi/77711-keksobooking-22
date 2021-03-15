@@ -1,15 +1,6 @@
-export {
-  getRandomInt,
-  getRandomFloat,
-  getRandomArray,
-  getRandomNumberWithLeadingZero,
-  getRandomArrayWithUniqueItems,
-  addDataToField,
-  onFailGetFetchAds,
-  onSuccess,
-  onFailPostFetchAds,
-  resetData
-};
+import {mainPinMarker, map, popupAddressField} from './map.js';
+import {CENTER_COORDINATES} from './data.js'
+
 
 const getRandomInt = (min, max) => {
   if (min < 0 || max < 0 || min > max) {
@@ -127,12 +118,22 @@ const onSuccess = () => {
   })
 }
 
-
-
+const resetMap = () => {
+  mainPinMarker.setLatLng({
+    lat: CENTER_COORDINATES.lat,
+    lng: CENTER_COORDINATES.lng,
+  });
+  map.setView({
+    lat: CENTER_COORDINATES.lat,
+    lng: CENTER_COORDINATES.lng,
+  }, 9);
+  popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
+}
 
 const adForm = document.querySelector('.ad-form');
 const resetData = () => {
   adForm.reset();
+  resetMap()
 }
 
 
@@ -176,3 +177,16 @@ const onFailPostFetchAds = () => {
     });
   }
 }
+
+export {
+  getRandomInt,
+  getRandomFloat,
+  getRandomArray,
+  getRandomNumberWithLeadingZero,
+  getRandomArrayWithUniqueItems,
+  addDataToField,
+  onFailGetFetchAds,
+  onSuccess,
+  onFailPostFetchAds,
+  resetData
+};

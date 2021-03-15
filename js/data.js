@@ -6,22 +6,10 @@ import {
   getRandomArrayWithUniqueItems
 } from './util.js';
 
-export {
-  createAuthor,
-  createLocation,
-  createOffer,
-  createAdData,
-  createAdDataList,
-  typesTranslation,
-  typesAndPriceHousing,
-  timeHours
-};
-
-
 const MIN_PHOTO_NUMBER = 1;
 const MAX_PHOTO_NUMBER = 8;
 const MIN_PRICE = 0;
-const MAX_PRICE = 100000;
+const MAX_PRICE = 1000000;
 const MIN_ROOMS = 0;
 const MAX_ROOMS = 100;
 const MIN_GUESTS = 0;
@@ -34,12 +22,26 @@ const MAX_Y = 139.80000;
 const SYMBOLS_NUMBER_Y = 5;
 const ADS_COUNT = 10;
 
+
+const CENTER_COORDINATES = {
+  lat: 35.68951,
+  lng: 139.69201,
+};
+
+
 const typesAndPriceHousing = new Map([
   ['palace', '10000'],
   ['flat', '1000'],
   ['house', '5000'],
   ['bungalow', '0'],
 ]);
+
+const roomsAndCapacity = {
+  1: ['1'],
+  2: ['1', '2'],
+  3: ['1', '2', '3'],
+  100: ['0'],
+};
 
 
 const createAuthor = () => {
@@ -63,6 +65,10 @@ const typesTranslation = new Map([
   ['house', 'Дом'],
   ['bungalow', 'Бунгало'],
 ]);
+
+
+
+
 
 
 const createOffer = () => {
@@ -120,5 +126,16 @@ const createAdData = () => {
 
 const createAdDataList = () => new Array(ADS_COUNT).fill(null).map(() => createAdData());
 
-
+export {
+  createAuthor,
+  createLocation,
+  createOffer,
+  createAdData,
+  createAdDataList,
+  typesTranslation,
+  typesAndPriceHousing,
+  roomsAndCapacity,
+  CENTER_COORDINATES,
+  ADS_COUNT
+};
 

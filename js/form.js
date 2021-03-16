@@ -1,4 +1,4 @@
-import {typesAndPriceHousing} from './data.js';
+import {typesAndPriceHousing, roomsAndCapacity} from './data.js';
 import {postFetchAds} from './api.js';
 import {onFailPostFetchAds, onSuccess, resetData} from './util.js';
 
@@ -27,27 +27,22 @@ timeIn.addEventListener('change', (evt) => {
 
 
 // /* Синхронизация и валидация количества комнат и гостей */
-// const roomNumber = adForm.querySelector('#room_number');
-// const capacityRoom = adForm.querySelector('#capacity');
-// const capacityOptions = adForm.querySelector('#capacity option');
+const roomNumber = adForm.querySelector('#room_number');
+const capacityRoom = adForm.querySelector('#capacity');
 
-//
-// roomNumber.addEventListener('change', (evt) => {
-//   evt.preventDefault();
-//   roomNumber.value = evt.target.value;
-//   capacityRoom.value = evt.target.value;
-//   // roomNumber.value = roomsAndCapacity.get(evt.target.value);
-//   // capacityRoom.value = roomsAndCapacity.get(evt.target.value);
-// });
-//
-//
-// // 1 комната — «для 1 гостя»;
-// // 2 комнаты — «для 2 гостей» или «для 1 гостя»;
-// // 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-// // 100 комнат — «не для гостей».
-
-
-
+roomNumber.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  const capacityOptions = capacityRoom.querySelectorAll('option');
+  const capacitiesForRoom = roomsAndCapacity[evt.target.value];
+  capacityOptions.forEach((option) => {
+    const capacityValue = option.value;
+    if (!capacitiesForRoom.includes(Number(capacityValue))) {
+      option.setAttribute('disabled', '')
+    } else {
+      option.removeAttribute('disabled');
+    }
+  })
+});
 
 
 /* валидация поля для заголовка */
@@ -105,7 +100,6 @@ const setUserFormSubmit =
       );
     });
   };
-
 
 
 const resetButton = document.querySelector('.ad-form__reset');

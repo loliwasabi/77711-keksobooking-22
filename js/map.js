@@ -1,5 +1,5 @@
 import {adDataList, domAdList} from './popup.js';
-import {CENTER_COORDINATES} from './data.js';
+import {CENTER_COORDINATES, ADS_COUNT} from './data.js';
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetList = adForm.querySelectorAll('fieldset');
@@ -79,7 +79,8 @@ const pinIcon = L.icon({
 });
 
 const createBalloon = () => {
-  adDataList.forEach((adData, i) => {
+  const adDataListSliced = adDataList.slice(0, ADS_COUNT);
+  adDataListSliced.forEach((adData, i) => {
     const marker = L.marker({
       lat: adData.location.lat,
       lng: adData.location.lng,
@@ -87,7 +88,6 @@ const createBalloon = () => {
       draggable: true,
       icon: pinIcon,
     });
-
 
     marker.addTo(map)
       .bindPopup(domAdList[i],

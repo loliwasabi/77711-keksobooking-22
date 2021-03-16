@@ -37,10 +37,10 @@ const typesAndPriceHousing = new Map([
 ]);
 
 const roomsAndCapacity = {
-  1: ['1'],
-  2: ['1', '2'],
-  3: ['1', '2', '3'],
-  100: ['0'],
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
 };
 
 
@@ -65,7 +65,6 @@ const typesTranslation = new Map([
   ['house', 'Дом'],
   ['bungalow', 'Бунгало'],
 ]);
-
 
 
 

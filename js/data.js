@@ -21,7 +21,7 @@ const MIN_Y = 139.70000;
 const MAX_Y = 139.80000;
 const SYMBOLS_NUMBER_Y = 5;
 const ADS_COUNT = 10;
-
+const ANY_TYPE = 'any';
 
 const CENTER_COORDINATES = {
   lat: 35.68951,
@@ -65,9 +65,6 @@ const typesTranslation = new Map([
   ['house', 'Дом'],
   ['bungalow', 'Бунгало'],
 ]);
-
-
-
 
 
 const createOffer = () => {
@@ -135,6 +132,7 @@ export {
   typesAndPriceHousing,
   roomsAndCapacity,
   CENTER_COORDINATES,
-  ADS_COUNT
+  ADS_COUNT,
+  ANY_TYPE
 };
 

@@ -1,5 +1,5 @@
 import {mainPinMarker, map, popupAddressField} from './map.js';
-import {CENTER_COORDINATES} from './data.js'
+import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
 
 
 const getRandomInt = (min, max) => {
@@ -178,6 +178,11 @@ const onFailPostFetchAds = () => {
   }
 }
 
+const sliceAdList = (adDataList) => {
+  return  adDataList.slice(0, ADS_COUNT);
+}
+
+
 export {
   getRandomInt,
   getRandomFloat,
@@ -188,5 +193,6 @@ export {
   onFailGetFetchAds,
   onSuccess,
   onFailPostFetchAds,
-  resetData
+  resetData,
+  sliceAdList
 };

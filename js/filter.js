@@ -2,10 +2,8 @@ import {adResponse, createAdCard} from './popup.js';
 import {sliceAdList} from './util.js';
 
 const ANY_TYPE = 'any';
-
 const ANY_ROOMS = 'any';
 const ANY_GUESTS = 'any';
-
 
 /* фильтрация по типу */
 const typeFilterSelect = document.querySelector('#housing-type');
@@ -73,9 +71,7 @@ guestsFilterSelect.addEventListener('change', (evt) => {
   adMarkers.forEach(removeAdMarker)
 
   adResponse.forEach((adData) => {
-    console.log( evt.target.value + ' куда кликнули' + typeof evt.target.value);
-    console.log(adData.offer.guests + ' знчение из даты'  + typeof adData.offer.guests)
-    if (Number(evt.target.value) === adData.offer.guests || evt.target.value === ANY_ROOMS) {
+    if (Number(evt.target.value) === adData.offer.guests || evt.target.value === ANY_GUESTS) {
       filteredAds.push(adData)
     }
   });
@@ -87,9 +83,7 @@ guestsFilterSelect.addEventListener('change', (evt) => {
 });
 
 
-
 /* фильтрация по цене */
-
 const PRICE_RANGE = {
   low: {
     min: 0,
@@ -115,7 +109,6 @@ priceFilterSelect.addEventListener('change', (evt) => {
   const selectedPriceValue = evt.target.value;
   if (!(selectedPriceValue === ANY_PRICE)) {
     const adMarkers = document.querySelectorAll('.adPins');
-
 
     const removeAdMarker = (adMarker) => {
       adMarker.remove()

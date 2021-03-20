@@ -5,22 +5,26 @@ const ANY_TYPE = 'any';
 const ANY_ROOMS = 'any';
 const ANY_GUESTS = 'any';
 
-/* фильтрация по типу */
-const typeFilterSelect = document.querySelector('#housing-type');
 
-typeFilterSelect.addEventListener('change', (evt) => {
-  evt.preventDefault();
+/* common filter */
+
+const filteringHouse = (filterFunctionsArray) => {
   const adMarkers = document.querySelectorAll('.adPins');
   const filteredAds = [];
 
   const removeAdMarker = (adMarker) => {
-    adMarker.remove()
+    adMarker.remove();
   }
-  adMarkers.forEach(removeAdMarker)
+  adMarkers.forEach(removeAdMarker);
+  console.log('==>' + filterFunctionsArray.length);
 
   adResponse.forEach((adData) => {
-    if (evt.target.value === adData.offer.type || evt.target.value === ANY_TYPE) {
-      filteredAds.push(adData)
+    let filteredAd = adData;
+    filterFunctionsArray.forEach((filteringFunction) => {
+      filteredAd = filteringFunction(filteredAd)
+    })
+    if (filteredAd) {
+      filteredAds.push(filteredAd);
     }
   });
 
@@ -28,6 +32,30 @@ typeFilterSelect.addEventListener('change', (evt) => {
   slicedAdList.forEach((adData) => {
     createAdCard(adData);
   })
+}
+
+
+/* array of filter functions */
+
+const FILTER_FUNCTIONS = []
+
+/* фильтрация по типу */
+const typeFilterSelect = document.querySelector('#housing-type');
+
+typeFilterSelect.addEventListener('change', (evt) => {
+  evt.preventDefault();
+
+
+  const typeFilter = (adData) => {
+    if (adData && (evt.target.value === adData.offer.type || evt.target.value === ANY_TYPE)) {
+      return adData;
+    }
+  }
+  if (!FILTER_FUNCTIONS.includes(typeFilter)) {
+    FILTER_FUNCTIONS.push(typeFilter);
+  }
+
+  filteringHouse(FILTER_FUNCTIONS);
 });
 
 
@@ -36,25 +64,19 @@ const roomsFilterSelect = document.querySelector('#housing-rooms');
 
 roomsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const adMarkers = document.querySelectorAll('.adPins');
-  const filteredAds = [];
 
-  const removeAdMarker = (adMarker) => {
-    adMarker.remove()
-  }
-  adMarkers.forEach(removeAdMarker)
-
-  adResponse.forEach((adData) => {
-    if (Number(evt.target.value) === adData.offer.rooms || evt.target.value === ANY_ROOMS) {
-      filteredAds.push(adData)
+  const roomFilter = (adData) => {
+    if (adData && (Number(evt.target.value) === adData.offer.rooms || evt.target.value === ANY_ROOMS)) {
+      return adData;
     }
-  });
+  }
+  if (!FILTER_FUNCTIONS.includes(roomFilter)) {
+    FILTER_FUNCTIONS.push(roomFilter);
+  }
 
-  const slicedAdList = sliceAdList(filteredAds);
-  slicedAdList.forEach((adData) => {
-    createAdCard(adData);
-  })
+  filteringHouse(FILTER_FUNCTIONS);
 });
+
 
 
 /* фильтрация по числу гостей */
@@ -66,13 +88,13 @@ guestsFilterSelect.addEventListener('change', (evt) => {
   const filteredAds = [];
 
   const removeAdMarker = (adMarker) => {
-    adMarker.remove()
+    adMarker.remove();
   }
-  adMarkers.forEach(removeAdMarker)
+  adMarkers.forEach(removeAdMarker);
 
   adResponse.forEach((adData) => {
     if (Number(evt.target.value) === adData.offer.guests || evt.target.value === ANY_GUESTS) {
-      filteredAds.push(adData)
+      filteredAds.push(adData);
     }
   });
 
@@ -111,14 +133,14 @@ priceFilterSelect.addEventListener('change', (evt) => {
     const adMarkers = document.querySelectorAll('.adPins');
 
     const removeAdMarker = (adMarker) => {
-      adMarker.remove()
+      adMarker.remove();
     }
-    adMarkers.forEach(removeAdMarker)
+    adMarkers.forEach(removeAdMarker);
 
     adResponse.forEach((adData) => {
       if ((adData.offer.price >= PRICE_RANGE[selectedPriceValue].min && adData.offer.price <= PRICE_RANGE[selectedPriceValue].max)
       ) {
-        filteredAds.push(adData)
+        filteredAds.push(adData);
       }
     });
   } else {
@@ -143,9 +165,9 @@ housingFeatures.forEach((housingFeature) => {
     if (evt.target.checked) {
       const adMarkers = document.querySelectorAll('.adPins');
       const removeAdMarker = (adMarker) => {
-        adMarker.remove()
+        adMarker.remove();
       }
-      adMarkers.forEach(removeAdMarker)
+      adMarkers.forEach(removeAdMarker);
 
       adResponse.forEach((adData) => {
         if (adData.offer.features.includes(evt.target.value)) {

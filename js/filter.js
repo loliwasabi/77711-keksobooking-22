@@ -155,3 +155,4 @@ housingFeatures.forEach((housingFeature) => {
 })
 
 
+export {filteringHouse};

@@ -5,7 +5,6 @@ const SYMBOLS_NUMBER = 5;
 const MAP_SCALE = 9;
 const OPENING_LAT = 35.68091;
 const OPENING_LNG = 139.76714;
-
 const ICON_HEIGHT = 52;
 const ICON_WIDTH = 52;
 const ICON_ANCHOR_HEIGHT = 52;
@@ -115,5 +114,5 @@ const createBalloon = (latParam, lngParam, domAdCardParam) => {
 }
 
 
-export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon};
+export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon, MAP_SCALE};
 

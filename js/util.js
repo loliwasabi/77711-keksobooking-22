@@ -1,5 +1,6 @@
-import {mainPinMarker, map, popupAddressField} from './map.js';
+import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
 import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
+import {filteringHouse} from './filter.js'
 
 const ONFAIL_SHOW_TIME = 5000;
 const adForm = document.querySelector('.ad-form');
@@ -124,14 +125,16 @@ const resetMap = () => {
   map.setView({
     lat: CENTER_COORDINATES.lat,
     lng: CENTER_COORDINATES.lng,
-  }, 9);
+  }, MAP_SCALE);
   popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
 }
 
 
 const resetData = () => {
   adForm.reset();
-  resetMap()
+  // filteringHouse.reset();
+  resetMap();
+
 }
 
 
@@ -200,7 +203,7 @@ export {
   onSuccess,
   onFailPostFetchAds,
   resetData,
-  sliceAdList,
+  sliceAdList
   // showInvalidElements
 };
 

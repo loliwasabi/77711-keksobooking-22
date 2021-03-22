@@ -1,6 +1,9 @@
 import {mainPinMarker, map, popupAddressField} from './map.js';
 import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
 
+const ONFAIL_SHOW_TIME = 5000;
+const adForm = document.querySelector('.ad-form');
+
 
 const getRandomInt = (min, max) => {
   if (min < 0 || max < 0 || min > max) {
@@ -65,30 +68,23 @@ const addDataToField = (componentDom, data, field) => {
 }
 
 
-
-
-const ONFAIL_SHOW_TIME = 5000;
 const onFailGetFetchAds = (message) => {
   const onFailContainer = document.createElement('div');
-  onFailContainer.style.zIndex = 100;
+  onFailContainer.style.zIndex = '100';
   onFailContainer.style.position = 'absolute';
-  onFailContainer.style.left = 0;
-  onFailContainer.style.top = 0;
-  onFailContainer.style.right = 0;
+  onFailContainer.style.left = '0';
+  onFailContainer.style.top = '0';
+  onFailContainer.style.right = '0';
   onFailContainer.style.padding = '10px 3px';
   onFailContainer.style.fontSize = '30px';
   onFailContainer.style.textAlign = 'center';
   onFailContainer.style.backgroundColor = 'red';
   onFailContainer.textContent = message;
-
   document.body.append(onFailContainer);
-
   setTimeout(() => {
     onFailContainer.remove();
   }, ONFAIL_SHOW_TIME);
 }
-
-
 
 
 const onEscClickSuccess = (evt) => {
@@ -97,6 +93,7 @@ const onEscClickSuccess = (evt) => {
   }
 }
 document.addEventListener('keydown', onEscClickSuccess);
+
 
 const onSuccess = () => {
   const successPostPopup = document.createElement('div');
@@ -112,11 +109,12 @@ const onSuccess = () => {
     successEl.remove();
   }
 
-  successPostPopup.addEventListener('click', function (evt) {
+  successPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
     removeSuccessPopup();
   })
 }
+
 
 const resetMap = () => {
   mainPinMarker.setLatLng({
@@ -130,13 +128,11 @@ const resetMap = () => {
   popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
 }
 
-const adForm = document.querySelector('.ad-form');
+
 const resetData = () => {
   adForm.reset();
   resetMap()
 }
-
-
 
 
 const removeFailPopup = () => {
@@ -154,6 +150,7 @@ const onEscClickFail = (evt) => {
 }
 document.addEventListener('keydown', onEscClickFail);
 
+
 const onFailPostFetchAds = () => {
   const failPostPopup = document.createElement('div');
   failPostPopup.setAttribute('id', 'fail');
@@ -165,22 +162,31 @@ const onFailPostFetchAds = () => {
   document.body.append(failPostPopup);
   document.querySelector('.error').style.zIndex = '10000';
 
-  failPostPopup.addEventListener('click', function (evt) {
+  failPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
     removeFailPopup();
   })
 
   if (errorButton) {
-    errorButton.addEventListener('click', function (evt) {
+    errorButton.addEventListener('click', (evt) => {
       evt.preventDefault();
       removeFailPopup();
     });
   }
 }
 
+
 const sliceAdList = (adDataList) => {
-  return  adDataList.slice(0, ADS_COUNT);
+  return adDataList.slice(0, ADS_COUNT);
 }
+
+// const showInvalidElements = () => {
+//   const invalidElements = adForm.querySelectorAll('input:invalid, select:invalid');
+//   invalidElements.forEach((invalidElement) => {
+//     invalidElement.style.border = 'solid 4px red';
+//   });
+// }
+
 
 
 export {
@@ -194,5 +200,8 @@ export {
   onSuccess,
   onFailPostFetchAds,
   resetData,
-  sliceAdList
+  sliceAdList,
+  // showInvalidElements
 };
+
+

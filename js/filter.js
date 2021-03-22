@@ -1,45 +1,70 @@
+/* global _:readonly */
 import {adResponse, createAdCard} from './popup.js';
 import {sliceAdList} from './util.js';
 
+const ANY_PRICE = 'any';
 const ANY_TYPE = 'any';
 const ANY_ROOMS = 'any';
 const ANY_GUESTS = 'any';
+const RERENDER_DELAY = 500;
+const FILTER_FUNCTIONS = [];
+const PRICE_RANGE = {
+  low: {
+    min: 0,
+    max: 10000,
+  },
+  middle: {
+    min: 10000,
+    max: 50000,
+  },
+  high: {
+    min: 50000,
+    max: Infinity,
+  },
+}
+
+const priceFilterSelect = document.querySelector('#housing-price');
+const typeFilterSelect = document.querySelector('#housing-type');
+const roomsFilterSelect = document.querySelector('#housing-rooms');
+const guestsFilterSelect = document.querySelector('#housing-guests');
+const housingFeatures = document.querySelectorAll('#housing-features input');
 
 
 /* common filter */
-const filteringHouse = (filterFunctionsArray) => {
-  const adMarkers = document.querySelectorAll('.adPins');
-  const filteredAds = [];
+const filteringHouse = _.debounce(
+  (filterFunctionsArray) => {
+    const adMarkers = document.querySelectorAll('.adPins');
+    const filteredAds = [];
+    const adPopup = document.querySelector('.leaflet-popup');
+    adPopup.remove();
 
-  const removeAdMarker = (adMarker) => {
-    adMarker.remove();
-  }
-  adMarkers.forEach(removeAdMarker);
-
-  adResponse.forEach((adData) => {
-    let filteredAd = adData;
-    filterFunctionsArray.forEach((filteringFunction) => {
-      filteredAd = filteringFunction(filteredAd)
-    })
-    if (filteredAd) {
-      filteredAds.push(filteredAd);
+    const removeAdMarker = (adMarker) => {
+      adMarker.remove();
     }
-  });
+    adMarkers.forEach(removeAdMarker);
 
-  const slicedAdList = sliceAdList(filteredAds);
-  slicedAdList.forEach((adData) => {
-    createAdCard(adData);
-  })
-}
+    adResponse.forEach((adData) => {
+      let filteredAd = adData;
 
+      filterFunctionsArray.forEach((filteringFunction) => {
+        filteredAd = filteringFunction(filteredAd)
+      })
 
-/* array of filter functions */
-const FILTER_FUNCTIONS = [];
+      if (filteredAd) {
+        filteredAds.push(filteredAd);
+      }
+    });
+
+    const slicedAdList = sliceAdList(filteredAds);
+    slicedAdList.forEach((adData) => {
+      createAdCard(adData);
+    })
+  },
+  RERENDER_DELAY,
+)
 
 
 /* фильтрация по типу */
-const typeFilterSelect = document.querySelector('#housing-type');
-
 typeFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
 
@@ -56,23 +81,6 @@ typeFilterSelect.addEventListener('change', (evt) => {
 
 
 /* фильтрация по цене */
-const PRICE_RANGE = {
-  low: {
-    min: 0,
-    max: 10000,
-  },
-  middle: {
-    min: 10000,
-    max: 50000,
-  },
-  high: {
-    min: 50000,
-    max: Infinity,
-  },
-}
-const ANY_PRICE = 'any';
-const priceFilterSelect = document.querySelector('#housing-price');
-
 priceFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
 
@@ -86,7 +94,6 @@ priceFilterSelect.addEventListener('change', (evt) => {
       }
     }
   }
-
   if (!FILTER_FUNCTIONS.includes(priceFilter)) {
     FILTER_FUNCTIONS.push(priceFilter);
   }
@@ -95,8 +102,6 @@ priceFilterSelect.addEventListener('change', (evt) => {
 
 
 /* фильтрация по числу комнат */
-const roomsFilterSelect = document.querySelector('#housing-rooms');
-
 roomsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
 
@@ -113,8 +118,6 @@ roomsFilterSelect.addEventListener('change', (evt) => {
 
 
 /* фильтрация по числу гостей */
-const guestsFilterSelect = document.querySelector('#housing-guests');
-
 guestsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
 
@@ -126,14 +129,11 @@ guestsFilterSelect.addEventListener('change', (evt) => {
   if (!FILTER_FUNCTIONS.includes(guestsFilter)) {
     FILTER_FUNCTIONS.push(guestsFilter);
   }
-
   filteringHouse(FILTER_FUNCTIONS);
 });
 
 
 /* фильтрация по удобствам */
-const housingFeatures = document.querySelectorAll('#housing-features input');
-
 housingFeatures.forEach((housingFeature) => {
   housingFeature.addEventListener('change', (evt) => {
     evt.preventDefault();
@@ -153,3 +153,5 @@ housingFeatures.forEach((housingFeature) => {
     filteringHouse(FILTER_FUNCTIONS);
   });
 })
+
+

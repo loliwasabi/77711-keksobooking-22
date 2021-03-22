@@ -22,12 +22,10 @@ const MAX_Y = 139.80000;
 const SYMBOLS_NUMBER_Y = 5;
 const ADS_COUNT = 10;
 
-
 const CENTER_COORDINATES = {
   lat: 35.68951,
   lng: 139.69201,
 };
-
 
 const typesAndPriceHousing = new Map([
   ['palace', '10000'],
@@ -43,6 +41,13 @@ const roomsAndCapacity = {
   100: [0],
 };
 
+const typesTranslation = new Map([
+  ['palace', 'Дворец'],
+  ['flat', 'Квартира'],
+  ['house', 'Дом'],
+  ['bungalow', 'Бунгало'],
+]);
+
 
 const createAuthor = () => {
   return {
@@ -57,14 +62,6 @@ const createLocation = () => {
     y: getRandomFloat(MIN_Y, MAX_Y, SYMBOLS_NUMBER_Y),
   };
 };
-
-
-const typesTranslation = new Map([
-  ['palace', 'Дворец'],
-  ['flat', 'Квартира'],
-  ['house', 'Дом'],
-  ['bungalow', 'Бунгало'],
-]);
 
 
 const createOffer = () => {
@@ -122,6 +119,7 @@ const createAdData = () => {
 
 const createAdDataList = () => new Array(ADS_COUNT).fill(null).map(() => createAdData());
 
+
 export {
   createAuthor,
   createLocation,
@@ -132,6 +130,6 @@ export {
   typesAndPriceHousing,
   roomsAndCapacity,
   CENTER_COORDINATES,
-  ADS_COUNT,
+  ADS_COUNT
 };
 

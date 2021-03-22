@@ -3,10 +3,11 @@ import {typesTranslation} from './data.js';
 import {addDataToField, sliceAdList} from './util.js';
 import {getFetchAds, onFailGetFetchAds} from './api.js'
 
-const adTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 
 const domAdList = [];
+let adResponse;
+
+const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createAdCard = (adDataParam) => {
   const domAdCard = adTemplate.cloneNode(true);
@@ -58,15 +59,13 @@ const createAdCard = (adDataParam) => {
 
   domAdList.push(domAdCard);
 
-
   const lat = adDataParam.location.lat;
   const lng = adDataParam.location.lng;
   createBalloon(lat, lng, domAdCard)
 }
 
-let adResponse;
-
 const responsePromise = getFetchAds(onFailGetFetchAds);
+
 responsePromise.then((responseAd) => {
   adResponse = responseAd;
   const slicedArray = sliceAdList(adResponse);
@@ -75,6 +74,7 @@ responsePromise.then((responseAd) => {
     createAdCard(adDataParam);
   });
 });
+
 
 export {adTemplate, domAdList, createAdCard,responsePromise, adResponse};
 

@@ -1,5 +1,6 @@
 import {onFailGetFetchAds} from './util.js';
 
+
 const getFetchAds = (onFailGetFetchAds) => {
   return fetch('https://22.javascript.pages.academy/keksobooking/data',
     {
@@ -17,6 +18,7 @@ const getFetchAds = (onFailGetFetchAds) => {
       onFailGetFetchAds('При загрузке данных с сервера произошла ошибка запроса');
     });
 }
+
 
 const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
   fetch('https://22.javascript.pages.academy/keksobooking',
@@ -37,7 +39,6 @@ const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
       onFailPostFetchAds();
     })
 }
-
 
 
 export {getFetchAds, postFetchAds, onFailGetFetchAds};

@@ -33,6 +33,12 @@ timeIn.addEventListener('change', (evt) => {
   timeOut.value = evt.target.value;
 });
 
+timeOut.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  timeOut.value = evt.target.value;
+  timeIn.value = evt.target.value;
+});
+
 
 // /* Синхронизация и валидация количества комнат и гостей */
 roomNumber.addEventListener('change', (evt) => {

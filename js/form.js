@@ -1,5 +1,5 @@
 import {typesAndPriceHousing, roomsAndCapacity} from './data.js';
-import {postFetchAds} from './api.js';
+import {postAdsToServer} from './api.js';
 import {onFailPostFetchAds, onSuccess, resetData} from './util.js';
 
 const MIN_TITLE_LENGTH = 30;
@@ -80,7 +80,6 @@ adFormPrice.addEventListener('invalid', () => {
   } else {
     adFormPrice.setCustomValidity('');
   }
-  adFormPrice.reportValidity();
 });
 
 
@@ -94,7 +93,25 @@ const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    postFetchAds(
+
+    // const getValidity = () => {
+    //   const inputsOrSelects = evt.target.querySelectorAll('input, select');
+    //   inputsOrSelects.forEach( (inputOrSelect) => {
+    //     inputOrSelect.validity;
+    //   })
+    // }
+    // // console.log(getValidity);
+    // if (getValidity() === false)
+    // {
+    //   postAdsToServer(
+    //     onSuccess,
+    //     resetData,
+    //     onFailPostFetchAds,
+    //     new FormData(evt.target),
+    //   );
+    // }
+
+    postAdsToServer(
       onSuccess,
       resetData,
       onFailPostFetchAds,

@@ -1,9 +1,11 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
 import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
-import {filteringHouse} from './filter.js'
+// import {createAdCard} from './popup.js'
+
 
 const ONFAIL_SHOW_TIME = 5000;
 const adForm = document.querySelector('.ad-form');
+const filterForm = document.querySelector('.map__filters');
 
 
 const getRandomInt = (min, max) => {
@@ -126,15 +128,15 @@ const resetMap = () => {
     lat: CENTER_COORDINATES.lat,
     lng: CENTER_COORDINATES.lng,
   }, MAP_SCALE);
+
   popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
 }
 
 
 const resetData = () => {
   adForm.reset();
-  // filteringHouse.reset();
   resetMap();
-
+  filterForm.reset();
 }
 
 
@@ -183,12 +185,12 @@ const sliceAdList = (adDataList) => {
   return adDataList.slice(0, ADS_COUNT);
 }
 
-// const showInvalidElements = () => {
-//   const invalidElements = adForm.querySelectorAll('input:invalid, select:invalid');
-//   invalidElements.forEach((invalidElement) => {
-//     invalidElement.style.border = 'solid 4px red';
-//   });
-// }
+const showInvalidElements = (form) => {
+  const invalidElements = form.querySelectorAll('input:invalid, select:invalid');
+  invalidElements.forEach((invalidElement) => {
+    invalidElement.style.border = 'solid 2px red';
+  });
+}
 
 
 
@@ -203,8 +205,8 @@ export {
   onSuccess,
   onFailPostFetchAds,
   resetData,
-  sliceAdList
-  // showInvalidElements
+  sliceAdList,
+  showInvalidElements
 };
 
 

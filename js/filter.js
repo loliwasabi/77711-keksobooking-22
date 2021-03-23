@@ -35,8 +35,11 @@ const filteringHouse = _.debounce(
   (filterFunctionsArray) => {
     const adMarkers = document.querySelectorAll('.adPins');
     const filteredAds = [];
+
     const adPopup = document.querySelector('.leaflet-popup');
-    adPopup.remove();
+    if (adPopup) {
+      adPopup.remove();
+    }
 
     const removeAdMarker = (adMarker) => {
       adMarker.remove();

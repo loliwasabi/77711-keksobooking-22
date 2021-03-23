@@ -1,7 +1,7 @@
 import {createBalloon} from './map.js';
 import {typesTranslation} from './data.js';
 import {addDataToField, sliceAdList} from './util.js';
-import {getFetchAds, onFailGetFetchAds} from './api.js'
+import {getAdsFromServer, onFailGetFetchAds} from './api.js'
 
 
 const domAdList = [];
@@ -64,7 +64,7 @@ const createAdCard = (adDataParam) => {
   createBalloon(lat, lng, domAdCard)
 }
 
-const responsePromise = getFetchAds(onFailGetFetchAds);
+const responsePromise = getAdsFromServer(onFailGetFetchAds);
 
 responsePromise.then((responseAd) => {
   adResponse = responseAd;

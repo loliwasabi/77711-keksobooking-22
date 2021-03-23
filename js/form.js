@@ -13,7 +13,7 @@ const roomNumber = adForm.querySelector('#room_number');
 const capacityRoom = adForm.querySelector('#capacity');
 const titleInput = document.querySelector('#title');
 const resetButton = document.querySelector('.ad-form__reset');
-
+const capacityOptions = capacityRoom.querySelectorAll('option');
 
 /* Синхронизируем поля "тип жилья" и "цена за ночь" и поля заезда и выезда */
 const typeFormField = adForm.querySelector('#type');
@@ -40,10 +40,9 @@ timeOut.addEventListener('change', (evt) => {
 });
 
 
-// /* Синхронизация и валидация количества комнат и гостей */
+/* Синхронизация и валидация количества комнат и гостей */
 roomNumber.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const capacityOptions = capacityRoom.querySelectorAll('option');
   const capacitiesForRoom = roomsAndCapacity[evt.target.value];
   capacityOptions.forEach((option) => {
     const capacityValue = option.value;
@@ -52,6 +51,7 @@ roomNumber.addEventListener('change', (evt) => {
     } else {
       option.removeAttribute('disabled');
     }
+    roomNumber.reportValidity();
   })
 });
 

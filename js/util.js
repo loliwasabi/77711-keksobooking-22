@@ -197,12 +197,12 @@ const sliceAdList = (adDataList) => {
   return adDataList.slice(0, ADS_COUNT);
 }
 
-const showInvalidElements = (form) => {
-  const invalidElements = form.querySelectorAll('input:invalid, select:invalid');
-  invalidElements.forEach((invalidElement) => {
-    invalidElement.style.border = 'solid 2px red';
-  });
-}
+// const showInvalidElements = (form) => {
+//   const invalidElements = form.querySelectorAll('input:invalid, select:invalid');
+//   invalidElements.forEach((invalidElement) => {
+//     invalidElement.style.border = 'solid 2px red';
+//   });
+// }
 
 
 export {
@@ -217,7 +217,7 @@ export {
   onFailPostFetchAds,
   resetData,
   sliceAdList,
-  showInvalidElements
+  // showInvalidElements
 };
 
 

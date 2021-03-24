@@ -14,6 +14,7 @@ const capacityRoom = adForm.querySelector('#capacity');
 const titleInput = document.querySelector('#title');
 const resetButton = document.querySelector('.ad-form__reset');
 const capacityOptions = capacityRoom.querySelectorAll('option');
+const roomOptions = roomNumber.querySelectorAll('option');
 
 /* Синхронизируем поля "тип жилья" и "цена за ночь" и поля заезда и выезда */
 const typeFormField = adForm.querySelector('#type');
@@ -56,6 +57,42 @@ roomNumber.addEventListener('change', (evt) => {
 });
 
 
+capacityRoom.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  const capacitiesForRoom = roomsAndCapacity[evt.target.value];
+  roomOptions.forEach((option) => {
+    const roomValue = option.value;
+    if (roomValue < capacitiesForRoom) {
+      option.setAttribute('disabled', '')
+    } else {
+      option.removeAttribute('disabled');
+    }
+    // roomNumber.reportValidity();
+  })
+});
+
+// capacityRoom.addEventListener('change', (evt) => {
+//   evt.preventDefault();
+//   const roomsForCapacity = roomsAndCapacity[evt.target.value];
+//   roomOptions.forEach((option) => {
+//     const RoomValue = option.value;
+//     if (roomsForCapacity.includes(Number(RoomValue))) {
+//       option.setAttribute('disabled', '')
+//     } else {
+//       option.removeAttribute('disabled');
+//     }
+//     capacityRoom.reportValidity();
+//   })
+// });
+
+
+// capacityRoom.addEventListener('change', (evt) => {
+//   evt.preventDefault();
+// //   capacityRoom.value = evt.target.value;
+// //   roomNumber.value = evt.target.value;
+// });
+
+
 /* валидация поля для заголовка */
 titleInput.addEventListener('input', () => {
   const valueLength = titleInput.value.length;
@@ -70,19 +107,18 @@ titleInput.addEventListener('input', () => {
 });
 
 
-/* валидация поля для цены */
-adFormPrice.addEventListener('invalid', () => {
-  // console.log('===========================')
-  // const priceValue = adFormPrice.value.length;
-  if (priceValue > MAX_PRICE) {
-    adFormPrice.setCustomValidity('Цена не должна превышать 1000000');
-  } else if (adFormPrice.validity.valueMissing) {
-    adFormPrice.setCustomValidity('Это обязательное поле!');
-  } else {
-    adFormPrice.setCustomValidity('');
-  }
-});
-
+// /* валидация поля для цены */
+// adFormPrice.addEventListener('invalid', () => {
+//   // console.log('===========================')
+//   // const priceValue = adFormPrice.value.length;
+//   if (priceValue > MAX_PRICE) {
+//     adFormPrice.setCustomValidity('Цена не должна превышать 1000000');
+//   } else if (adFormPrice.validity.valueMissing) {
+//     adFormPrice.setCustomValidity('Это обязательное поле!');
+//   } else {
+//     adFormPrice.setCustomValidity('');
+//   }
+// });
 
 
 /* валидация поля для адреса  */
@@ -95,41 +131,41 @@ const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    var qaw = adFormPrice.checkValidity();
-    console.log('=====>'+qaw);
-
-    const isValid = () => {
-      const inputsOrSelects = evt.target.querySelectorAll('input, select');
-      let isValidForm = true;
-      inputsOrSelects.forEach( (inputOrSelect) => {
-
-        // console.log(inputOrSelect)
-        // console.log(inputOrSelect.checkValidity())
-
-        if (inputOrSelect.checkValidity() === false) {
-          isValidForm = false;
-        }
-      })
-      return isValidForm;
-    }
-
-    // console.log(isValid());
-    if (isValid())
-    {
-      postAdsToServer(
-        onSuccess,
-        resetData,
-        onFailPostFetchAds,
-        new FormData(evt.target),
-      );
-    }
-
+    // var qaw = adFormPrice.checkValidity();
+    // console.log('=====>'+qaw);
+    //
+    // const isValid = () => {
+    //   const inputsOrSelects = evt.target.querySelectorAll('input, select');
+    //   let isValidForm = true;
+    //   inputsOrSelects.forEach( (inputOrSelect) => {
+    //
+    //     // console.log(inputOrSelect)
+    //     // console.log(inputOrSelect.checkValidity())
+    //
+    //     if (inputOrSelect.checkValidity() === false) {
+    //       isValidForm = false;
+    //     }
+    //   })
+    //   return isValidForm;
+    // }
+    //
+    // // console.log(isValid());
+    // if (isValid())
+    // {
     // postAdsToServer(
     //   onSuccess,
     //   resetData,
     //   onFailPostFetchAds,
     //   new FormData(evt.target),
     // );
+    // }
+
+    postAdsToServer(
+      onSuccess,
+      resetData,
+      onFailPostFetchAds,
+      new FormData(evt.target),
+    );
   });
 };
 

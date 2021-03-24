@@ -72,7 +72,8 @@ titleInput.addEventListener('input', () => {
 
 /* валидация поля для цены */
 adFormPrice.addEventListener('invalid', () => {
-  const priceValue = adFormPrice.value.length;
+  // console.log('===========================')
+  // const priceValue = adFormPrice.value.length;
   if (priceValue > MAX_PRICE) {
     adFormPrice.setCustomValidity('Цена не должна превышать 1000000');
   } else if (adFormPrice.validity.valueMissing) {
@@ -81,6 +82,7 @@ adFormPrice.addEventListener('invalid', () => {
     adFormPrice.setCustomValidity('');
   }
 });
+
 
 
 /* валидация поля для адреса  */
@@ -93,30 +95,41 @@ const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
+    var qaw = adFormPrice.checkValidity();
+    console.log('=====>'+qaw);
 
-    // const getValidity = () => {
-    //   const inputsOrSelects = evt.target.querySelectorAll('input, select');
-    //   inputsOrSelects.forEach( (inputOrSelect) => {
-    //     inputOrSelect.validity;
-    //   })
-    // }
-    // // console.log(getValidity);
-    // if (getValidity() === false)
-    // {
-    //   postAdsToServer(
-    //     onSuccess,
-    //     resetData,
-    //     onFailPostFetchAds,
-    //     new FormData(evt.target),
-    //   );
-    // }
+    const isValid = () => {
+      const inputsOrSelects = evt.target.querySelectorAll('input, select');
+      let isValidForm = true;
+      inputsOrSelects.forEach( (inputOrSelect) => {
 
-    postAdsToServer(
-      onSuccess,
-      resetData,
-      onFailPostFetchAds,
-      new FormData(evt.target),
-    );
+        // console.log(inputOrSelect)
+        // console.log(inputOrSelect.checkValidity())
+
+        if (inputOrSelect.checkValidity() === false) {
+          isValidForm = false;
+        }
+      })
+      return isValidForm;
+    }
+
+    // console.log(isValid());
+    if (isValid())
+    {
+      postAdsToServer(
+        onSuccess,
+        resetData,
+        onFailPostFetchAds,
+        new FormData(evt.target),
+      );
+    }
+
+    // postAdsToServer(
+    //   onSuccess,
+    //   resetData,
+    //   onFailPostFetchAds,
+    //   new FormData(evt.target),
+    // );
   });
 };
 

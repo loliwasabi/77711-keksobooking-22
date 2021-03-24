@@ -1,6 +1,8 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
 import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
-// import {createAdCard} from './popup.js'
+// import {adResponse, createAdCard, responsePromise} from './popup.js'
+// import {filteringHouse} from './filter.js'
+
 
 
 const ONFAIL_SHOW_TIME = 5000;
@@ -131,12 +133,22 @@ const resetMap = () => {
 
   popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
 }
-
+////// заменить в фильтре
+const removeAdMarkers = () => {
+  const adMarkers = document.querySelectorAll('.adPins');
+  const removeAdMarker = (adMarker) => {
+    adMarker.remove();
+  }
+  adMarkers.forEach(removeAdMarker);
+}
+/////
 
 const resetData = () => {
   adForm.reset();
   resetMap();
+  removeAdMarkers();
   filterForm.reset();
+
 }
 
 
@@ -191,7 +203,6 @@ const showInvalidElements = (form) => {
     invalidElement.style.border = 'solid 2px red';
   });
 }
-
 
 
 export {

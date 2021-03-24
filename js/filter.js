@@ -40,12 +40,12 @@ const filteringHouse = _.debounce(
     if (adPopup) {
       adPopup.remove();
     }
-
+/////
     const removeAdMarker = (adMarker) => {
       adMarker.remove();
     }
     adMarkers.forEach(removeAdMarker);
-
+/////
     adResponse.forEach((adData) => {
       let filteredAd = adData;
 

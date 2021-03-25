@@ -1,5 +1,6 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
 import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
+import {adResponse, createAdCard} from './popup.js';
 // import {adResponse, createAdCard, responsePromise} from './popup.js'
 // import {filteringHouse} from './filter.js'
 
@@ -149,6 +150,11 @@ const resetData = () => {
   removeAdMarkers();
   filterForm.reset();
 
+  const slicedAds = sliceAdList(adResponse);
+  slicedAds.forEach((slicedAd) => {
+    createAdCard(slicedAd);
+  })
+
 }
 
 
@@ -198,7 +204,7 @@ const sliceAdList = (adDataList) => {
 }
 
 // const showInvalidElements = (form) => {
-//   const invalidElements = form.querySelectorAll('input:invalid, select:invalid');
+//   const invalidElements = form.querySelector('input:invalid, select:invalid');
 //   invalidElements.forEach((invalidElement) => {
 //     invalidElement.style.border = 'solid 2px red';
 //   });
@@ -216,7 +222,7 @@ export {
   onSuccess,
   onFailPostFetchAds,
   resetData,
-  sliceAdList,
+  sliceAdList
   // showInvalidElements
 };
 

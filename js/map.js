@@ -95,17 +95,17 @@ const pinIcon = L.icon({
 });
 
 
-const createBalloon = (latParam, lngParam, domAdCardParam) => {
+const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
   const marker = L.marker({
-    lat: latParam,
-    lng: lngParam,
+    lat: latParameter,
+    lng: lngParameter,
   }, {
     draggable: true,
     icon: pinIcon,
   });
 
   marker.addTo(map)
-    .bindPopup(domAdCardParam,
+    .bindPopup(domAdCardParameter,
       {
         keepInView: true,
       },

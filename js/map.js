@@ -1,20 +1,33 @@
-import {adDataList, domAdList} from './popup.js';
+const SYMBOLS_NUMBER = 5;
+const MAP_SCALE = 9;
+const OPENING_LAT = 35.68091;
+const OPENING_LNG = 139.76714;
+const ICON_HEIGHT = 52;
+const ICON_WIDTH = 52;
+const ICON_ANCHOR_HEIGHT = 52;
+const ICON_ANCHOR_WIDTH = 26;
+const RED_ICON_URL = './img/main-pin.svg';
+const BLUE_ICON_URL = './img/pin.svg';
+const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>';
+const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-export {map, popupAddressField, pinIcon, createBalloon};
+const CENTER_COORDINATES = {
+  lat: 35.68951,
+  lng: 139.69201,
+};
 
 const adForm = document.querySelector('.ad-form');
-const fieldsetList = adForm.querySelectorAll('fieldset');
-const mapFilters = document.querySelector('.map__filters');
+const fields = adForm.querySelectorAll('fieldset');
+const mapFilter = document.querySelector('.map__filters');
 const popupAddressField = document.querySelector('#address');
-const SYMBOLS_NUMBER = 5;
+
 
 adForm.classList.add('ad-form--disabled');
-fieldsetList.forEach(function (fieldset) {
+fields.forEach((fieldset) => {
   fieldset.setAttribute('disabled', 'disabled');
 });
-
-mapFilters.classList.add('map__filters--disabled');
-mapFilters.setAttribute('disabled', 'disabled');
+mapFilter.classList.add('map__filters--disabled');
+mapFilter.setAttribute('disabled', 'disabled');
 
 
 /* global L:readonly */
@@ -22,41 +35,39 @@ const map = L.map('map-canvas')
   /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
     adForm.classList.remove('ad-form--disabled');
-    fieldsetList.forEach(function (fieldset) {
+    fields.forEach((fieldset) => {
       fieldset.removeAttribute('disabled');
-      mapFilters.classList.remove('map__filters--disabled');
-      mapFilters.removeAttribute('disabled');
+      mapFilter.classList.remove('map__filters--disabled');
+      mapFilter.removeAttribute('disabled');
       popupAddressField.setAttribute('readonly', 'readonly');
     });
   })
   .setView({
-    lat: 35.68091,
-    lng: 139.76714,
-  }, 9);
+    lat: OPENING_LAT,
+    lng: OPENING_LNG,
+  }, MAP_SCALE);
+
 
 /*создаем слой карты */
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  TILE_LAYER,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>',
+    attribution: COPYRIGHT,
   },
 ).addTo(map);
 
 
 /* загружаем иконку для красного маркера */
 const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: RED_ICON_URL,
+  iconSize: [ICON_WIDTH, ICON_HEIGHT],
+  iconAnchor: [ICON_ANCHOR_WIDTH, ICON_ANCHOR_HEIGHT],
 });
 
 
 /* задаем положение красного маркера */
 const mainPinMarker = L.marker(
-  {
-    lat: 35.68091,
-    lng: 139.76714,
-  },
+  CENTER_COORDINATES,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -77,31 +88,28 @@ mainPinMarker.on('moveend', (evt) => {
 
 /* загружаем иконку для синего маркера */
 const pinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: BLUE_ICON_URL,
+  iconSize: [ICON_WIDTH, ICON_HEIGHT],
+  iconAnchor: [ICON_ANCHOR_WIDTH, ICON_ANCHOR_HEIGHT],
 });
 
-const createBalloon = () => {
-  adDataList.forEach((adData, i) => {
-    const marker = L.marker({
-      lat: adData.location.lat,
-      lng: adData.location.lng,
-    }, {
-      draggable: true,
-      icon: pinIcon,
-    });
 
-
-    marker.addTo(map)
-      .bindPopup(domAdList[i],
-        {
-          keepInView: true,
-        },
-      );
+const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
+  const marker = L.marker({
+    lat: latParameter,
+    lng: lngParameter,
+  }, {
+    draggable: true,
+    icon: pinIcon,
   });
+  marker.addTo(map)
+    .bindPopup(domAdCardParameter,
+      {
+        keepInView: true,
+      },
+    )
+  marker._icon.classList.add('adPins');
 }
 
 
-
-
+export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon, MAP_SCALE, CENTER_COORDINATES};

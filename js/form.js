@@ -1,69 +1,119 @@
-import {typesAndPriceHousing} from './data.js';
-import {postFetchAds} from './api.js';
-import {onFailPostFetchAds, onSuccess, resetData} from './util.js';
+import {postAdsToServer} from './api.js';
+import {onFailPostFetchAds, onFormSuccessSubmit, resetData} from './util.js';
 
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+
+const TYPES_AND_MIN_PRICE = new Map([
+  ['palace', '10000'],
+  ['flat', '1000'],
+  ['house', '5000'],
+  ['bungalow', '0'],
+]);
+
+const ROOMS_AND_CAPACITY = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
 
 const adForm = document.querySelector('.ad-form');
-
-/* Синхронизируем поля "тип жилья" и "цена за ночь" и поля заезда и выезда */
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+const roomNumber = adForm.querySelector('#room_number');
+const capacityRoom = adForm.querySelector('#capacity');
+const titleInput = document.querySelector('#title');
+const resetButton = document.querySelector('.ad-form__reset');
+const capacityOptions = capacityRoom.querySelectorAll('option');
 const typeFormField = adForm.querySelector('#type');
 const adFormPrice = adForm.querySelector('#price');
-
-// if (typeFormField.readyState === 'loading') {
-//   console.log('loaded');
-//   typeFormField.addEventListener('DOMContentLoaded ', (evt) => {
-//     console.log('----' + evt.target.value);
-//     evt.preventDefault();
-//     adFormPrice.placeholder = typesAndPriceHousing.get(evt.target.value);
-//     adFormPrice.min = typesAndPriceHousing.get(evt.target.value);
-//   });
-// } else {
-//   console.log('not loaded');
-// }
+const addressInput = document.querySelector('#address');
 
 
+/* Синхронизируем поля "тип жилья" и "цена за ночь" и поля заезда и выезда */
 typeFormField.addEventListener('change', (evt) => {
   evt.preventDefault();
-  adFormPrice.placeholder = typesAndPriceHousing.get(evt.target.value);
-  adFormPrice.min = typesAndPriceHousing.get(evt.target.value);
+  adFormPrice.placeholder = TYPES_AND_MIN_PRICE.get(evt.target.value);
+  adFormPrice.min = TYPES_AND_MIN_PRICE.get(evt.target.value);
 });
 
 
-// const timeIn = adForm.querySelector('#timein');
-// const timeOut = adForm.querySelector('#timeout');
-//
-// timeIn.addEventListener('change', (evt) => {
-//   evt.preventDefault();
-//   adFormPrice.option = timeinHours.get(evt.target.value);
-//
-// });
-//
-// timeOut.addEventListener('change', (evt) => {
-//   evt.preventDefault();
-//   adFormPrice.option = timeutHours.get(evt.target.key);
-// });
+/* Синхронизируем поля заезда и выезда */
+timeIn.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  timeIn.value = evt.target.value;
+  timeOut.value = evt.target.value;
+});
+
+timeOut.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  timeOut.value = evt.target.value;
+  timeIn.value = evt.target.value;
+});
+
+
+/* Синхронизация и валидация количества комнат и гостей */
+roomNumber.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  const capacitiesForRoom = ROOMS_AND_CAPACITY[evt.target.value];
+  capacityOptions.forEach((option) => {
+    const capacityValue = option.value;
+    if (!capacitiesForRoom.includes(Number(capacityValue))) {
+      option.setAttribute('disabled', '');
+    } else {
+      option.removeAttribute('disabled');
+    }
+    roomNumber.reportValidity();
+  })
+  const roomCount = evt.target.value;
+  if (!ROOMS_AND_CAPACITY[roomCount].includes(Number(capacityRoom.value))) {
+    roomNumber.style.border = 'solid 2px red';
+    roomNumber.setCustomValidity('Недостаточно комнат');
+  } else {
+    roomNumber.setCustomValidity('');
+    roomNumber.style.border = 'none';
+  }
+  roomNumber.reportValidity();
+});
+
+
+/* валидация поля для заголовка */
+titleInput.addEventListener('input', () => {
+  const valueLength = titleInput.value.length;
+  if (valueLength < MIN_TITLE_LENGTH) {
+    titleInput.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) + ' симв.');
+  } else if (valueLength > MAX_TITLE_LENGTH) {
+    titleInput.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) + ' симв.');
+  } else {
+    titleInput.setCustomValidity('');
+  }
+  titleInput.reportValidity();
+});
+
+
+/* валидация поля для адреса  */
+addressInput.setAttribute('readonly', '');
 
 
 /* обработчик отправки формы */
-
-const setUserFormSubmit =
-  () => {
-    adForm.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-
-      postFetchAds(
-        onSuccess,
-        resetData,
-        onFailPostFetchAds,
-        new FormData(evt.target),
-      );
-    });
-  };
-export {setUserFormSubmit};
+const setUserFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    postAdsToServer(
+      onFormSuccessSubmit,
+      resetData,
+      onFailPostFetchAds,
+      new FormData(evt.target),
+    );
+  });
+};
 
 
-const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', function (evt) {
+resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetData();
 });
+
+
+export {setUserFormSubmit};

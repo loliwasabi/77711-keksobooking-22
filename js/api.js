@@ -1,4 +1,4 @@
-import {onFailGetFetchAds} from './util.js';
+import {showFailFetchAds} from './util.js';
 
 
 const getAdsFromServer = (onFailGetFetchAds) => {
@@ -41,4 +41,4 @@ const postAdsToServer = (onSuccess, resetData, onFailPostFetchAds, body) => {
 }
 
 
-export {getAdsFromServer, postAdsToServer, onFailGetFetchAds};
+export {getAdsFromServer, postAdsToServer, showFailFetchAds};

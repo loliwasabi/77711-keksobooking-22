@@ -1,5 +1,3 @@
-// import {CENTER_COORDINATES} from './data.js';
-
 const SYMBOLS_NUMBER = 5;
 const MAP_SCALE = 9;
 const OPENING_LAT = 35.68091;
@@ -12,36 +10,35 @@ const RED_ICON_URL = './img/main-pin.svg';
 const BLUE_ICON_URL = './img/pin.svg';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>';
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
 const CENTER_COORDINATES = {
   lat: 35.68951,
   lng: 139.69201,
 };
 
 const adForm = document.querySelector('.ad-form');
-const fieldsetList = adForm.querySelectorAll('fieldset');
-const mapFilters = document.querySelector('.map__filters');
+const fields = adForm.querySelectorAll('fieldset');
+const mapFilter = document.querySelector('.map__filters');
 const popupAddressField = document.querySelector('#address');
 
 
 adForm.classList.add('ad-form--disabled');
-fieldsetList.forEach( (fieldset) => {
+fields.forEach((fieldset) => {
   fieldset.setAttribute('disabled', 'disabled');
 });
-
-mapFilters.classList.add('map__filters--disabled');
-mapFilters.setAttribute('disabled', 'disabled');
+mapFilter.classList.add('map__filters--disabled');
+mapFilter.setAttribute('disabled', 'disabled');
 
 
 /* global L:readonly */
 const map = L.map('map-canvas')
-
   /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
     adForm.classList.remove('ad-form--disabled');
-    fieldsetList.forEach( (fieldset) => {
+    fields.forEach((fieldset) => {
       fieldset.removeAttribute('disabled');
-      mapFilters.classList.remove('map__filters--disabled');
-      mapFilters.removeAttribute('disabled');
+      mapFilter.classList.remove('map__filters--disabled');
+      mapFilter.removeAttribute('disabled');
       popupAddressField.setAttribute('readonly', 'readonly');
     });
   })
@@ -105,7 +102,6 @@ const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
     draggable: true,
     icon: pinIcon,
   });
-
   marker.addTo(map)
     .bindPopup(domAdCardParameter,
       {

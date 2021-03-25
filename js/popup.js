@@ -1,9 +1,8 @@
 import {createBalloon} from './map.js';
-// import {typesTranslation} from './data.js';
-import {addDataToField, sliceAdList} from './util.js';
-import {getAdsFromServer, onFailGetFetchAds} from './api.js'
+import {addDataToField, getSliceAdList} from './util.js';
+import {getAdsFromServer, showFailFetchAds} from './api.js'
 
-const typesTranslation = new Map([
+const TYPES_TRANSLATION = new Map([
   ['palace', 'Дворец'],
   ['flat', 'Квартира'],
   ['house', 'Дом'],
@@ -12,8 +11,8 @@ const typesTranslation = new Map([
 
 const domAds = [];
 let adResponse;
-
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
+
 
 const createAdPin = (adDataParameter) => {
   const domAdCard = adTemplate.cloneNode(true);
@@ -42,7 +41,7 @@ const createAdPin = (adDataParameter) => {
   const popupType = domAdCard.querySelector('.popup__type');
   popupType.innerHTML = '';
   let typeTranslated;
-  typeTranslated = typesTranslation.get(adDataParameter.offer.type);
+  typeTranslated = TYPES_TRANSLATION.get(adDataParameter.offer.type);
   addDataToField(popupType, typeTranslated, 'textContent');
 
   const featureDomContainer = domAdCard.querySelector('.popup__features');
@@ -65,23 +64,21 @@ const createAdPin = (adDataParameter) => {
   addDataToField(photoDomContainer, photoListContent, 'innerHTML')
 
   domAds.push(domAdCard);
-
   const lat = adDataParameter.location.lat;
   const lng = adDataParameter.location.lng;
   createBalloon(lat, lng, domAdCard)
 }
 
-const responsePromise = getAdsFromServer(onFailGetFetchAds);
+const getResponsePromise = getAdsFromServer(showFailFetchAds);
 
-responsePromise.then((responseAd) => {
+getResponsePromise.then((responseAd) => {
   adResponse = responseAd;
-  const slicedArray = sliceAdList(adResponse);
-
+  const slicedArray = getSliceAdList(adResponse);
   slicedArray.forEach((adDataParameter) => {
     createAdPin(adDataParameter);
   });
 });
 
 
-export {adTemplate, domAds, createAdPin,responsePromise, adResponse};
+export {adTemplate, domAds, createAdPin, getResponsePromise, adResponse};
 

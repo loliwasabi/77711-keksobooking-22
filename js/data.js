@@ -121,15 +121,15 @@
 
 
 // export {
-  // createAuthor,
-  // createLocation,
-  // createOffer,
-  // createAdData,
-  // createAdDataList,
-  // typesTranslation,
-  // typesAndPriceHousing,
-  // roomsAndCapacity,
-  // CENTER_COORDINATES,
-  // ADS_COUNT
+// createAuthor,
+// createLocation,
+// createOffer,
+// createAdData,
+// createAdDataList,
+// typesTranslation,
+// typesAndPriceHousing,
+// roomsAndCapacity,
+// CENTER_COORDINATES,
+// ADS_COUNT
 // };
 

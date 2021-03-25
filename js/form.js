@@ -1,10 +1,23 @@
-import {typesAndPriceHousing, roomsAndCapacity} from './data.js';
+// import {typesAndPriceHousing, roomsAndCapacity} from './data.js';
 import {postAdsToServer} from './api.js';
 import {onFailPostFetchAds, onSuccess, resetData} from './util.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 // const MAX_PRICE = 1000000;
+const typesAndPriceHousing = new Map([
+  ['palace', '10000'],
+  ['flat', '1000'],
+  ['house', '5000'],
+  ['bungalow', '0'],
+]);
+
+const roomsAndCapacity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
 
 const adForm = document.querySelector('.ad-form');
 const timeIn = adForm.querySelector('#timein');

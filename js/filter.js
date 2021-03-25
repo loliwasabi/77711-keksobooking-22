@@ -1,6 +1,6 @@
 /* global _:readonly */
-import {adResponse, createAdCard} from './popup.js';
-import {sliceAdList} from './util.js';
+import {adResponse, createAdPin} from './popup.js';
+import {removeAdMarkers, sliceAdList} from './util.js';
 
 const ANY_PRICE = 'any';
 const ANY_TYPE = 'any';
@@ -33,19 +33,16 @@ const housingFeatures = document.querySelectorAll('#housing-features input');
 /* common filter */
 const filteringHouse = _.debounce(
   (filterFunctionsArray) => {
-    const adMarkers = document.querySelectorAll('.adPins');
+    // const adMarkers = document.querySelectorAll('.adPins');
     const filteredAds = [];
 
     const adPopup = document.querySelector('.leaflet-popup');
     if (adPopup) {
       adPopup.remove();
     }
-/////
-    const removeAdMarker = (adMarker) => {
-      adMarker.remove();
-    }
-    adMarkers.forEach(removeAdMarker);
-/////
+
+    removeAdMarkers();
+
     adResponse.forEach((adData) => {
       let filteredAd = adData;
 
@@ -60,7 +57,7 @@ const filteringHouse = _.debounce(
 
     const slicedAdList = sliceAdList(filteredAds);
     slicedAdList.forEach((adData) => {
-      createAdCard(adData);
+      createAdPin(adData);
     })
   },
   RERENDER_DELAY,

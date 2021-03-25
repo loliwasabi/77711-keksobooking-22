@@ -1,16 +1,23 @@
 import {createBalloon} from './map.js';
-import {typesTranslation} from './data.js';
+// import {typesTranslation} from './data.js';
 import {addDataToField, sliceAdList} from './util.js';
 import {getAdsFromServer, onFailGetFetchAds} from './api.js'
 
+const typesTranslation = new Map([
+  ['palace', 'Дворец'],
+  ['flat', 'Квартира'],
+  ['house', 'Дом'],
+  ['bungalow', 'Бунгало'],
+]);
 
-const domAdList = [];
+const domAds = [];
 let adResponse;
 
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const createAdCard = (adDataParameter) => {
+const createAdPin = (adDataParameter) => {
   const domAdCard = adTemplate.cloneNode(true);
+
   const popupTitle = domAdCard.querySelector('.popup__title');
   addDataToField(popupTitle, adDataParameter.offer.title, 'textContent');
 
@@ -57,7 +64,7 @@ const createAdCard = (adDataParameter) => {
   }
   addDataToField(photoDomContainer, photoListContent, 'innerHTML')
 
-  domAdList.push(domAdCard);
+  domAds.push(domAdCard);
 
   const lat = adDataParameter.location.lat;
   const lng = adDataParameter.location.lng;
@@ -71,10 +78,10 @@ responsePromise.then((responseAd) => {
   const slicedArray = sliceAdList(adResponse);
 
   slicedArray.forEach((adDataParameter) => {
-    createAdCard(adDataParameter);
+    createAdPin(adDataParameter);
   });
 });
 
 
-export {adTemplate, domAdList, createAdCard,responsePromise, adResponse};
+export {adTemplate, domAds, createAdPin,responsePromise, adResponse};
 

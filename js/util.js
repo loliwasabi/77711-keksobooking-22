@@ -1,66 +1,62 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
-import {CENTER_COORDINATES, ADS_COUNT} from './data.js'
-import {adResponse, createAdCard} from './popup.js';
-// import {adResponse, createAdCard, responsePromise} from './popup.js'
-// import {filteringHouse} from './filter.js'
+import {CENTER_COORDINATES} from './map.js'
+import {adResponse, createAdPin} from './popup.js';
 
-
-
-const ONFAIL_SHOW_TIME = 5000;
+const ON_FAIL_SHOW_TIME = 5000;
 const adForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
+const ADS_COUNT = 10;
+
+// const getRandomInt = (min, max) => {
+//   if (min < 0 || max < 0 || min > max) {
+//     return undefined;
+//   }
+//   min = Math.ceil(min);
+//   max = Math.floor(max);
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
 
 
-const getRandomInt = (min, max) => {
-  if (min < 0 || max < 0 || min > max) {
-    return undefined;
-  }
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-const getRandomFloat = (min, max, symbolsNumber) => {
-  if (min < 0 || max < 0 || min > max) {
-    return undefined;
-  }
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return (Math.random() * (max - min) + min).toFixed(symbolsNumber);
-}
-
-
-const getRandomNumberWithLeadingZero = (min, max) => {
-  if (getRandomInt(min, max) < 10) {
-    return '0' + getRandomInt(min, max);
-  }
-}
-
-
-const getRandomArray = (array) => {
-  const randomArray = [];
-  for (let i = 0; i < getRandomInt(0, array.length); i++) {
-    randomArray.push(array[getRandomInt(0, getRandomInt.length - 1)]);
-  }
-  return randomArray;
-};
-
-
-const getRandomArrayWithUniqueItems = (array) => {
-  const arrayLength = getRandomInt(0, array.length);
-  const resultRandomArrayWithUniqueItems = [];
-  while (resultRandomArrayWithUniqueItems.length < arrayLength) {
-    const maxIndex = array.length - 1;
-    const randomIndex = getRandomInt(0, maxIndex);
-    const randomItem = array[randomIndex];
-
-    if (!resultRandomArrayWithUniqueItems.includes(randomItem)) {
-      resultRandomArrayWithUniqueItems.push(randomItem);
-    }
-  }
-  return resultRandomArrayWithUniqueItems;
-}
+// const getRandomFloat = (min, max, symbolsNumber) => {
+//   if (min < 0 || max < 0 || min > max) {
+//     return undefined;
+//   }
+//   min = Math.ceil(min);
+//   max = Math.floor(max);
+//   return (Math.random() * (max - min) + min).toFixed(symbolsNumber);
+// }
+//
+//
+// const getRandomNumberWithLeadingZero = (min, max) => {
+//   if (getRandomInt(min, max) < 10) {
+//     return '0' + getRandomInt(min, max);
+//   }
+// }
+//
+//
+// const getRandomArray = (array) => {
+//   const randomArray = [];
+//   for (let i = 0; i < getRandomInt(0, array.length); i++) {
+//     randomArray.push(array[getRandomInt(0, getRandomInt.length - 1)]);
+//   }
+//   return randomArray;
+// };
+//
+//
+// const getRandomArrayWithUniqueItems = (array) => {
+//   const arrayLength = getRandomInt(0, array.length);
+//   const resultRandomArrayWithUniqueItems = [];
+//   while (resultRandomArrayWithUniqueItems.length < arrayLength) {
+//     const maxIndex = array.length - 1;
+//     const randomIndex = getRandomInt(0, maxIndex);
+//     const randomItem = array[randomIndex];
+//
+//     if (!resultRandomArrayWithUniqueItems.includes(randomItem)) {
+//       resultRandomArrayWithUniqueItems.push(randomItem);
+//     }
+//   }
+//   return resultRandomArrayWithUniqueItems;
+// }
 
 
 const addDataToField = (componentDom, data, field) => {
@@ -89,7 +85,7 @@ const onFailGetFetchAds = (message) => {
   document.body.append(onFailContainer);
   setTimeout(() => {
     onFailContainer.remove();
-  }, ONFAIL_SHOW_TIME);
+  }, ON_FAIL_SHOW_TIME);
 }
 
 
@@ -134,15 +130,16 @@ const resetMap = () => {
 
   popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
 }
-////// заменить в фильтре
-const removeAdMarkers = () => {
+
+
+export const removeAdMarkers = () => {
   const adMarkers = document.querySelectorAll('.adPins');
   const removeAdMarker = (adMarker) => {
     adMarker.remove();
   }
   adMarkers.forEach(removeAdMarker);
 }
-/////
+
 
 const resetData = () => {
   adForm.reset();
@@ -152,7 +149,7 @@ const resetData = () => {
 
   const slicedAds = sliceAdList(adResponse);
   slicedAds.forEach((slicedAd) => {
-    createAdCard(slicedAd);
+    createAdPin(slicedAd);
   })
 
 }
@@ -203,27 +200,19 @@ const sliceAdList = (adDataList) => {
   return adDataList.slice(0, ADS_COUNT);
 }
 
-// const showInvalidElements = (form) => {
-//   const invalidElements = form.querySelector('input:invalid, select:invalid');
-//   invalidElements.forEach((invalidElement) => {
-//     invalidElement.style.border = 'solid 2px red';
-//   });
-// }
-
 
 export {
-  getRandomInt,
-  getRandomFloat,
-  getRandomArray,
-  getRandomNumberWithLeadingZero,
-  getRandomArrayWithUniqueItems,
+  // getRandomInt,
+  // getRandomFloat,
+  // getRandomArray,
+  // getRandomNumberWithLeadingZero,
+  // getRandomArrayWithUniqueItems,
   addDataToField,
   onFailGetFetchAds,
   onSuccess,
   onFailPostFetchAds,
   resetData,
   sliceAdList
-  // showInvalidElements
 };
 
 

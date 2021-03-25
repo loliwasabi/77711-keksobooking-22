@@ -1,5 +1,4 @@
-import {CENTER_COORDINATES} from './data.js';
-
+// import {CENTER_COORDINATES} from './data.js';
 
 const SYMBOLS_NUMBER = 5;
 const MAP_SCALE = 9;
@@ -13,7 +12,10 @@ const RED_ICON_URL = './img/main-pin.svg';
 const BLUE_ICON_URL = './img/pin.svg';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>';
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
+const CENTER_COORDINATES = {
+  lat: 35.68951,
+  lng: 139.69201,
+};
 
 const adForm = document.querySelector('.ad-form');
 const fieldsetList = adForm.querySelectorAll('fieldset');
@@ -114,5 +116,5 @@ const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
 }
 
 
-export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon, MAP_SCALE};
+export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon, MAP_SCALE, CENTER_COORDINATES};
 

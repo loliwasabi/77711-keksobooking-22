@@ -46,6 +46,10 @@ const onEscSuccessClick = (evt) => {
 document.addEventListener('keydown', onEscSuccessClick);
 
 
+
+
+
+
 const onFormSuccessSubmit = () => {
   const successPostPopup = document.createElement('div');
   successPostPopup.setAttribute('id', 'successResponse');
@@ -57,6 +61,8 @@ const onFormSuccessSubmit = () => {
     const successPopup = document.querySelector('#successResponse');
     successPopup.remove();
   }
+  onSuccessPopupClick(successPostPopup);
+
   successPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
     onSuccessPopupClick();

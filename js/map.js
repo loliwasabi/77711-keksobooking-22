@@ -77,11 +77,7 @@ popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) 
 
 
 /* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
-mainPinMarker.on('moveend', onMainPinMoveEnd
-//   (evt) => {
-//   popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
-// }
-);
+mainPinMarker.on('moveend', onMainPinMoveEnd);
 
 
 /* загружаем иконку для синего маркера */

@@ -1,13 +1,19 @@
 /* global _:readonly */
 import {adResponse, createAdPin} from './popup.js';
 import {removeAdMarkers, getSliceAdList} from './util.js';
+import {
+  onPriceFilterSelectChange,
+  onTypeFilterSelectChange,
+  onRoomsFilterSelectChange,
+  onGuestsFilterSelectChange,
+  onFeaturesFilterSelectChange
+} from './filter-functions.js';
 
 const ANY_PRICE = 'any';
 const ANY_TYPE = 'any';
 const ANY_ROOMS = 'any';
 const ANY_GUESTS = 'any';
 const RERENDER_DELAY = 500;
-const FILTER_FUNCTIONS = [];
 
 const PRICE_RANGE = {
   low: {
@@ -29,11 +35,12 @@ const typeFilterSelect = document.querySelector('#housing-type');
 const roomsFilterSelect = document.querySelector('#housing-rooms');
 const guestsFilterSelect = document.querySelector('#housing-guests');
 const housingFeatures = document.querySelectorAll('#housing-features input');
+const filterFunctions = {};
 
 
 /* common filter */
 const filterHouse = _.debounce(
-  (filterFunctionsArray) => {
+  (filterFunctionsObject) => {
     const filteredAds = [];
     const adPopup = document.querySelector('.leaflet-popup');
     if (adPopup) {
@@ -42,9 +49,10 @@ const filterHouse = _.debounce(
     removeAdMarkers();
     adResponse.forEach((adData) => {
       let filteredAd = adData;
-      filterFunctionsArray.forEach((filteringFunction) => {
-        filteredAd = filteringFunction(filteredAd)
-      })
+      for (const [key] of Object.entries(filterFunctionsObject)) {
+        filteredAd = filterFunctionsObject[key](filteredAd);
+      }
+
       if (filteredAd) {
         filteredAds.push(filteredAd);
       }
@@ -61,92 +69,43 @@ const filterHouse = _.debounce(
 /* фильтрация по типу */
 typeFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const filterByType = (adData) => {
-    if (adData && (evt.target.value === adData.offer.type || evt.target.value === ANY_TYPE)) {
-      return adData;
-    }
-    return null;
-  }
-  if (!FILTER_FUNCTIONS.includes(filterByType)) {
-    FILTER_FUNCTIONS.push(filterByType);
-  }
-  filterHouse(FILTER_FUNCTIONS);
+  onTypeFilterSelectChange(filterFunctions, ANY_TYPE, evt.target.value);
 });
+
 
 
 /* фильтрация по цене */
 priceFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const filterByPrice = (adData) => {
-    const selectedPriceValue = evt.target.value;
-    if (selectedPriceValue === ANY_PRICE) {
-      return adData;
-    } else {
-      if (adData && (adData.offer.price >= PRICE_RANGE[selectedPriceValue].min) && (adData.offer.price <= PRICE_RANGE[selectedPriceValue].max)) {
-        return adData;
-      }
-    }
-    return null;
-  }
-  if (!FILTER_FUNCTIONS.includes(filterByPrice)) {
-    FILTER_FUNCTIONS.push(filterByPrice);
-  }
-  filterHouse(FILTER_FUNCTIONS);
+  onPriceFilterSelectChange(filterFunctions, ANY_PRICE, PRICE_RANGE, evt.target.value);
 });
+
 
 
 /* фильтрация по числу комнат */
 roomsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const filterByRooms = (adData) => {
-    if (adData && (Number(evt.target.value) === adData.offer.rooms || evt.target.value === ANY_ROOMS)) {
-      return adData;
-    }
-    return null;
-  }
-  if (!FILTER_FUNCTIONS.includes(filterByRooms)) {
-    FILTER_FUNCTIONS.push(filterByRooms);
-  }
-  filterHouse(FILTER_FUNCTIONS);
+  onRoomsFilterSelectChange(filterFunctions, ANY_ROOMS, evt.target.value);
 });
+
 
 
 /* фильтрация по числу гостей */
 guestsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  const filterByGuests = (adData) => {
-    if (adData && (Number(evt.target.value) === adData.offer.guests || evt.target.value === ANY_GUESTS)) {
-      return adData;
-    }
-    return null;
-  }
-  if (!FILTER_FUNCTIONS.includes(filterByGuests)) {
-    FILTER_FUNCTIONS.push(filterByGuests);
-  }
-  filterHouse(FILTER_FUNCTIONS);
+  onGuestsFilterSelectChange(filterFunctions, ANY_GUESTS, evt.target.value);
 });
+
 
 
 /* фильтрация по удобствам */
 housingFeatures.forEach((housingFeature) => {
   housingFeature.addEventListener('change', (evt) => {
     evt.preventDefault();
-    const filterByFeatures = (adData) => {
-      if (evt.target.checked) {
-        if (adData && adData.offer.features.includes(evt.target.value)) {
-          return adData;
-        }
-      } else {
-        return adData;
-      }
-      return null;
-    }
-    if (!FILTER_FUNCTIONS.includes(filterByFeatures)) {
-      FILTER_FUNCTIONS.push(filterByFeatures);
-    }
-    filterHouse(FILTER_FUNCTIONS);
+    onFeaturesFilterSelectChange(filterFunctions, evt.target.checked, evt.target.value);
   });
 })
+
 
 
 export {filterHouse};

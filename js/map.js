@@ -1,3 +1,5 @@
+import {onMapLoad, onMainPinMoveEnd} from './map-functions.js';
+
 const SYMBOLS_NUMBER = 5;
 const MAP_SCALE = 9;
 const OPENING_LAT = 35.68091;
@@ -34,13 +36,7 @@ mapFilter.setAttribute('disabled', 'disabled');
 const map = L.map('map-canvas')
   /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
-    adForm.classList.remove('ad-form--disabled');
-    fields.forEach((fieldset) => {
-      fieldset.removeAttribute('disabled');
-      mapFilter.classList.remove('map__filters--disabled');
-      mapFilter.removeAttribute('disabled');
-      popupAddressField.setAttribute('readonly', 'readonly');
-    });
+    onMapLoad(adForm, fields, mapFilter)
   })
   .setView({
     lat: OPENING_LAT,
@@ -81,9 +77,11 @@ popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) 
 
 
 /* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
-mainPinMarker.on('moveend', (evt) => {
-  popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
-});
+mainPinMarker.on('moveend', onMainPinMoveEnd
+//   (evt) => {
+//   popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
+// }
+);
 
 
 /* загружаем иконку для синего маркера */

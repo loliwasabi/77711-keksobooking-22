@@ -80,4 +80,4 @@ getResponsePromise.then((responseAd) => {
 });
 
 
-export {adTemplate, domAds, createAdPin, getResponsePromise, adResponse};
+export {createAdPin, adResponse};

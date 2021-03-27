@@ -77,7 +77,7 @@ const resetMap = () => {
 }
 
 
-export const removeAdMarkers = () => {
+const removeAdMarkers = () => {
   const adMarkers = document.querySelectorAll('.adPins');
   const removeAdMarker = (adMarker) => {
     adMarker.remove();
@@ -147,5 +147,6 @@ export {
   onFormSuccessSubmit,
   onFailPostFetchAds,
   resetData,
-  getSliceAdList
+  getSliceAdList,
+  removeAdMarkers
 };

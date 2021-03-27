@@ -99,7 +99,6 @@ const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
     lat: latParameter,
     lng: lngParameter,
   }, {
-    draggable: true,
     icon: pinIcon,
   });
   marker.addTo(map)

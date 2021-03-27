@@ -65,6 +65,7 @@ typeFilterSelect.addEventListener('change', (evt) => {
     if (adData && (evt.target.value === adData.offer.type || evt.target.value === ANY_TYPE)) {
       return adData;
     }
+    return null;
   }
   if (!FILTER_FUNCTIONS.includes(filterByType)) {
     FILTER_FUNCTIONS.push(filterByType);
@@ -85,6 +86,7 @@ priceFilterSelect.addEventListener('change', (evt) => {
         return adData;
       }
     }
+    return null;
   }
   if (!FILTER_FUNCTIONS.includes(filterByPrice)) {
     FILTER_FUNCTIONS.push(filterByPrice);
@@ -100,6 +102,7 @@ roomsFilterSelect.addEventListener('change', (evt) => {
     if (adData && (Number(evt.target.value) === adData.offer.rooms || evt.target.value === ANY_ROOMS)) {
       return adData;
     }
+    return null;
   }
   if (!FILTER_FUNCTIONS.includes(filterByRooms)) {
     FILTER_FUNCTIONS.push(filterByRooms);
@@ -115,6 +118,7 @@ guestsFilterSelect.addEventListener('change', (evt) => {
     if (adData && (Number(evt.target.value) === adData.offer.guests || evt.target.value === ANY_GUESTS)) {
       return adData;
     }
+    return null;
   }
   if (!FILTER_FUNCTIONS.includes(filterByGuests)) {
     FILTER_FUNCTIONS.push(filterByGuests);
@@ -135,6 +139,7 @@ housingFeatures.forEach((housingFeature) => {
       } else {
         return adData;
       }
+      return null;
     }
     if (!FILTER_FUNCTIONS.includes(filterByFeatures)) {
       FILTER_FUNCTIONS.push(filterByFeatures);

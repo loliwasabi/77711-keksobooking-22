@@ -1,7 +1,4 @@
-import {popupAddressField} from './map.js';
-
-
-const onMapLoad = (adForm, fields, mapFilter) => {
+const onMapLoad = (adForm, fields, mapFilter, popupAddressField) => {
   adForm.classList.remove('ad-form--disabled');
   fields.forEach((fieldset) => {
     fieldset.removeAttribute('disabled');
@@ -11,20 +8,9 @@ const onMapLoad = (adForm, fields, mapFilter) => {
   });
 }
 
-const onMainPinMoveEnd = (evt, SYMBOLS_NUMBER) => {
-  popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
+const onMainPinMoveEnd = (symbolNumber, popupAddressField, mainPinMarker) => {
+  popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(symbolNumber) + ', ' + mainPinMarker.getLatLng().lng.toFixed(symbolNumber);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 export {onMapLoad, onMainPinMoveEnd};

@@ -1,4 +1,4 @@
-import {showFailFetchAds} from './util.js';
+import {showFailFetchAds, onEscClick} from './util.js';
 
 
 const getAdsFromServer = (onFailGetFetchAds) => {
@@ -38,6 +38,7 @@ const postAdsToServer = (onSuccess, resetData, onFailPostFetchAds, body) => {
     .catch(() => {
       onFailPostFetchAds();
     })
+  document.addEventListener('keydown', onEscClick);
 }
 
 

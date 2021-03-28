@@ -1,6 +1,6 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
 import {CENTER_COORDINATES} from './map.js'
-import {adResponse, createAdPin} from './popup.js';
+import {getCopyAdResponse, createAdPin} from './popup.js';
 
 const ON_FAIL_SHOW_TIME = 5000;
 const adForm = document.querySelector('.ad-form');
@@ -38,48 +38,41 @@ const showFailFetchAds = (message) => {
 }
 
 
-const onEscSuccessClick = (evt) => {
-  if (evt.key === ('Escape' || 'Esc')) {
-    evt.preventDefault();
+const removeFailPopup = () => {
+  const failPopup = document.querySelector('#fail');
+  if (failPopup) {
+    failPopup.remove();
   }
 }
-document.addEventListener('keydown', onEscSuccessClick);
 
 
-
-
-
-
-const onFormSuccessSubmit = () => {
-  const successPostPopup = document.createElement('div');
-  successPostPopup.setAttribute('id', 'successResponse');
-  const successPostTemplate = document.querySelector('#success');
-  successPostPopup.append(successPostTemplate.content.cloneNode(true));
-  document.body.append(successPostPopup);
-  document.querySelector('.success').style.zIndex = '10000';
-  const onSuccessPopupClick = () => {
-    const successPopup = document.querySelector('#successResponse');
+const removeSuccessPopup = () => {
+  const successPopup = document.querySelector('#successResponse');
+  if (successPopup) {
     successPopup.remove();
   }
-  onSuccessPopupClick(successPostPopup);
-
-  successPostPopup.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    onSuccessPopupClick();
-  })
 }
 
 
-const resetMap = () => {
+const onEscClick = (evt) => {
+  if (evt.key === 'Escape' || evt.key === 'Esc') {
+    evt.preventDefault();
+    removeFailPopup();
+    removeSuccessPopup()
+  }
+}
+
+
+const resetMap = (mainPinMarker, map, popupAddressField, centerCoordinates, mapScale) => {
   mainPinMarker.setLatLng({
-    lat: CENTER_COORDINATES.lat,
-    lng: CENTER_COORDINATES.lng,
+    lat: centerCoordinates.lat,
+    lng: centerCoordinates.lng,
   });
   map.setView({
-    lat: CENTER_COORDINATES.lat,
-    lng: CENTER_COORDINATES.lng,
-  }, MAP_SCALE);
-  popupAddressField.value = `${CENTER_COORDINATES.lat}, ${CENTER_COORDINATES.lng}`
+    lat: centerCoordinates.lat,
+    lng: centerCoordinates.lng,
+  }, mapScale);
+  popupAddressField.value = `${centerCoordinates.lat}, ${centerCoordinates.lng}`
 }
 
 
@@ -94,31 +87,28 @@ const removeAdMarkers = () => {
 
 const resetData = () => {
   adForm.reset();
-  resetMap();
+  resetMap(mainPinMarker, map, popupAddressField, CENTER_COORDINATES, MAP_SCALE);
   removeAdMarkers();
   filterForm.reset();
-  const slicedAds = getSliceAdList(adResponse);
+  const slicedAds = getSliceAdList(getCopyAdResponse());
   slicedAds.forEach((slicedAd) => {
     createAdPin(slicedAd);
   })
 }
 
 
-const removeFailPopup = () => {
-  const failPopup = document.querySelector('#fail');
-  if (failPopup) {
-    failPopup.remove();
-  }
-}
-
-
-const onEscClickFail = (evt) => {
-  if (evt.key === ('Escape' || 'Esc')) {
+const onFormSuccessSubmit = () => {
+  const successPostPopup = document.createElement('div');
+  successPostPopup.setAttribute('id', 'successResponse');
+  const successPostTemplate = document.querySelector('#success');
+  successPostPopup.append(successPostTemplate.content.cloneNode(true));
+  document.body.append(successPostPopup);
+  document.querySelector('.success').style.zIndex = '10000';
+  successPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
-    removeFailPopup();
-  }
+    removeSuccessPopup();
+  })
 }
-document.addEventListener('keydown', onEscClickFail);
 
 
 const onFailPostFetchAds = () => {
@@ -154,5 +144,6 @@ export {
   onFailPostFetchAds,
   resetData,
   getSliceAdList,
-  removeAdMarkers
+  removeAdMarkers,
+  onEscClick
 };

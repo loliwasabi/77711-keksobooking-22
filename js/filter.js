@@ -1,5 +1,5 @@
 /* global _:readonly */
-import {adResponse, createAdPin} from './popup.js';
+import {createAdPin, getCopyAdResponse} from './popup.js';
 import {removeAdMarkers, getSliceAdList} from './util.js';
 import {
   onPriceFilterSelectChange,
@@ -47,10 +47,10 @@ const filterHouse = _.debounce(
       adPopup.remove();
     }
     removeAdMarkers();
-    adResponse.forEach((adData) => {
+    getCopyAdResponse().forEach((adData) => {
       let filteredAd = adData;
-      for (const [key] of Object.entries(filterFunctionsObject)) {
-        filteredAd = filterFunctionsObject[key](filteredAd);
+      for (const [, filter] of Object.entries(filterFunctionsObject)) {
+        filteredAd =  filter(filteredAd);
       }
 
       if (filteredAd) {

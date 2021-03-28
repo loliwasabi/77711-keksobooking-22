@@ -13,6 +13,9 @@ const domAds = [];
 let adResponse;
 const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
+const getCopyAdResponse = () => {
+  return JSON.parse(JSON.stringify(adResponse));
+}
 
 const createAdPin = (adDataParameter) => {
   const domAdCard = adTemplate.cloneNode(true);
@@ -80,4 +83,4 @@ getResponsePromise.then((responseAd) => {
 });
 
 
-export {createAdPin, adResponse};
+export {createAdPin, getCopyAdResponse};

@@ -36,7 +36,7 @@ mapFilter.setAttribute('disabled', 'disabled');
 const map = L.map('map-canvas')
   /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
-    onMapLoad(adForm, fields, mapFilter)
+    onMapLoad(adForm, fields, mapFilter, popupAddressField)
   })
   .setView({
     lat: OPENING_LAT,
@@ -77,9 +77,10 @@ popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) 
 
 
 /* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
-mainPinMarker.on('moveend', onMainPinMoveEnd);
-
-
+// mainPinMarker.on('moveend', onMainPinMoveEnd);
+mainPinMarker.on('moveend', () => {
+  onMainPinMoveEnd(SYMBOLS_NUMBER, popupAddressField, mainPinMarker)
+})
 /* загружаем иконку для синего маркера */
 const pinIcon = L.icon({
   iconUrl: BLUE_ICON_URL,

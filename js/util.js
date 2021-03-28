@@ -58,7 +58,8 @@ const onEscClick = (evt) => {
   if (evt.key === 'Escape' || evt.key === 'Esc') {
     evt.preventDefault();
     removeFailPopup();
-    removeSuccessPopup()
+    removeSuccessPopup();
+    document.removeEventListener('keydown', onEscClick);
   }
 }
 

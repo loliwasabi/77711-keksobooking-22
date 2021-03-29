@@ -1,4 +1,4 @@
-const onMapLoad = (adForm, fields, mapFilter, popupAddressField) => {
+const activateMap = (adForm, fields, mapFilter, popupAddressField) => {
   adForm.classList.remove('ad-form--disabled');
   fields.forEach((fieldset) => {
     fieldset.removeAttribute('disabled');
@@ -8,9 +8,10 @@ const onMapLoad = (adForm, fields, mapFilter, popupAddressField) => {
   });
 }
 
-const onMainPinMoveEnd = (symbolNumber, popupAddressField, mainPinMarker) => {
+
+const getCoordinatesOfMainPin = (symbolNumber, popupAddressField, mainPinMarker) => {
   popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(symbolNumber) + ', ' + mainPinMarker.getLatLng().lng.toFixed(symbolNumber);
 }
 
 
-export {onMapLoad, onMainPinMoveEnd};
+export {activateMap, getCoordinatesOfMainPin};

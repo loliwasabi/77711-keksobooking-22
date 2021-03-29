@@ -1,13 +1,14 @@
 /* global _:readonly */
-import {createAdPin, getCopyAdResponse} from './popup.js';
-import {removeAdMarkers, getSliceAdList} from './util.js';
+import {createAdPin} from './popup.js';
+import {removeAdMarkers, getSliceAdList, ADS_COUNT} from './util.js';
 import {
-  onPriceFilterSelectChange,
-  onTypeFilterSelectChange,
-  onRoomsFilterSelectChange,
-  onGuestsFilterSelectChange,
-  onFeaturesFilterSelectChange
+  showAdsByPriceFilter,
+  showAdsByTypeFilter,
+  showAdsByRoomsFilter,
+  showAdsByGuestsFilter,
+  showAdsByFeaturesFilter
 } from './filter-functions.js';
+import {getCopyAdResponse} from './map.js';
 
 const ANY_PRICE = 'any';
 const ANY_TYPE = 'any';
@@ -38,7 +39,6 @@ const housingFeatures = document.querySelectorAll('#housing-features input');
 const filterFunctions = {};
 
 
-/* common filter */
 const filterHouse = _.debounce(
   (filterFunctionsObject) => {
     const filteredAds = [];
@@ -47,16 +47,22 @@ const filterHouse = _.debounce(
       adPopup.remove();
     }
     removeAdMarkers();
-    getCopyAdResponse().forEach((adData) => {
-      let filteredAd = adData;
+    const adResponseCopies = getCopyAdResponse();
+    for (let i = 0; i <= adResponseCopies.length; i++) {
+      let filteredAd = adResponseCopies[i];
       for (const [, filter] of Object.entries(filterFunctionsObject)) {
-        filteredAd =  filter(filteredAd);
+        filteredAd = filter(filteredAd);
+        if (filteredAd === null) {
+          break;
+        }
       }
-
       if (filteredAd) {
         filteredAds.push(filteredAd);
       }
-    });
+      if (filteredAds.length === ADS_COUNT) {
+        break
+      }
+    }
     const sliceAdList = getSliceAdList(filteredAds);
     sliceAdList.forEach((adData) => {
       createAdPin(adData);
@@ -66,46 +72,41 @@ const filterHouse = _.debounce(
 )
 
 
-/* фильтрация по типу */
+
 typeFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  onTypeFilterSelectChange(filterFunctions, ANY_TYPE, evt.target.value);
+  showAdsByTypeFilter(filterFunctions, ANY_TYPE, evt.target.value);
 });
 
 
 
-/* фильтрация по цене */
 priceFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  onPriceFilterSelectChange(filterFunctions, ANY_PRICE, PRICE_RANGE, evt.target.value);
+  showAdsByPriceFilter(filterFunctions, ANY_PRICE, PRICE_RANGE, evt.target.value);
 });
 
 
 
-/* фильтрация по числу комнат */
 roomsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  onRoomsFilterSelectChange(filterFunctions, ANY_ROOMS, evt.target.value);
+  showAdsByRoomsFilter(filterFunctions, ANY_ROOMS, evt.target.value);
 });
 
 
 
-/* фильтрация по числу гостей */
 guestsFilterSelect.addEventListener('change', (evt) => {
   evt.preventDefault();
-  onGuestsFilterSelectChange(filterFunctions, ANY_GUESTS, evt.target.value);
+  showAdsByGuestsFilter(filterFunctions, ANY_GUESTS, evt.target.value);
 });
 
 
 
-/* фильтрация по удобствам */
 housingFeatures.forEach((housingFeature) => {
   housingFeature.addEventListener('change', (evt) => {
     evt.preventDefault();
-    onFeaturesFilterSelectChange(filterFunctions, evt.target.checked, evt.target.value);
+    showAdsByFeaturesFilter(filterFunctions, evt.target.checked, evt.target.value);
   });
 })
-
 
 
 export {filterHouse};

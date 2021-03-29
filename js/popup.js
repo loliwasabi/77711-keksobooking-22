@@ -1,6 +1,6 @@
 import {createBalloon} from './map.js';
-import {addDataToField, getSliceAdList} from './util.js';
-import {getAdsFromServer, showFailFetchAds} from './api.js'
+import {addDataToField} from './util.js';
+
 
 const TYPES_TRANSLATION = new Map([
   ['palace', 'Дворец'],
@@ -10,12 +10,9 @@ const TYPES_TRANSLATION = new Map([
 ]);
 
 const domAds = [];
-let adResponse;
-const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const getCopyAdResponse = () => {
-  return JSON.parse(JSON.stringify(adResponse));
-}
+
+const adTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const createAdPin = (adDataParameter) => {
   const domAdCard = adTemplate.cloneNode(true);
@@ -66,21 +63,13 @@ const createAdPin = (adDataParameter) => {
   }
   addDataToField(photoDomContainer, photoListContent, 'innerHTML')
 
+
   domAds.push(domAdCard);
   const lat = adDataParameter.location.lat;
   const lng = adDataParameter.location.lng;
   createBalloon(lat, lng, domAdCard)
 }
 
-const getResponsePromise = getAdsFromServer(showFailFetchAds);
-
-getResponsePromise.then((responseAd) => {
-  adResponse = responseAd;
-  const slicedArray = getSliceAdList(adResponse);
-  slicedArray.forEach((adDataParameter) => {
-    createAdPin(adDataParameter);
-  });
-});
 
 
-export {createAdPin, getCopyAdResponse};
+export {createAdPin};

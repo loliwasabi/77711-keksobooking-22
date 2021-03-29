@@ -1,7 +1,6 @@
 import {filterHouse} from './filter.js';
 
 
-/* фильтрация по типу */
 const filterByType = (adData, anyType, value) => {
   if (adData && (value === adData.offer.type || value === anyType)) {
     return adData;
@@ -9,7 +8,7 @@ const filterByType = (adData, anyType, value) => {
   return null;
 }
 
-const onTypeFilterSelectChange = (filterFunctions, anyType, value) => {
+const showAdsByTypeFilter = (filterFunctions, anyType, value) => {
   filterFunctions.type = (adData) => {
     return filterByType(adData, anyType, value);
   };
@@ -18,7 +17,6 @@ const onTypeFilterSelectChange = (filterFunctions, anyType, value) => {
 
 
 
-/* фильтрация по цене */
 const filterByPrice = (adData, anyPrice, priceRange, value) => {
   const selectedPriceValue = value;
   if (selectedPriceValue === anyPrice) {
@@ -32,7 +30,7 @@ const filterByPrice = (adData, anyPrice, priceRange, value) => {
   return null;
 }
 
-const onPriceFilterSelectChange = (filterFunctions, anyPrice, priceRange, value) => {
+const showAdsByPriceFilter = (filterFunctions, anyPrice, priceRange, value) => {
   filterFunctions.price = (adData) => {
     return filterByPrice(adData, anyPrice, priceRange, value);
   };
@@ -41,7 +39,6 @@ const onPriceFilterSelectChange = (filterFunctions, anyPrice, priceRange, value)
 
 
 
-/* фильтрация по числу комнат */
 const filterByRooms = (adData, anyRooms, value) => {
   if (adData && (Number(value) === adData.offer.rooms || value === anyRooms)) {
     return adData;
@@ -49,7 +46,7 @@ const filterByRooms = (adData, anyRooms, value) => {
   return null;
 }
 
-const onRoomsFilterSelectChange = (filterFunctions, anyRooms, value) => {
+const showAdsByRoomsFilter = (filterFunctions, anyRooms, value) => {
   filterFunctions.rooms = (adData) => {
     return filterByRooms(adData, anyRooms, value);
   };
@@ -58,7 +55,6 @@ const onRoomsFilterSelectChange = (filterFunctions, anyRooms, value) => {
 
 
 
-/* фильтрация по числу гостей */
 const filterByGuests = (adData, anyGuests, value) => {
   if (adData && (Number(value) === adData.offer.guests || value === anyGuests)) {
     return adData;
@@ -66,7 +62,7 @@ const filterByGuests = (adData, anyGuests, value) => {
   return null;
 }
 
-const onGuestsFilterSelectChange = (filterFunctions, anyGuests, value) => {
+const showAdsByGuestsFilter = (filterFunctions, anyGuests, value) => {
   filterFunctions.guests = (adData) => {
     return filterByGuests(adData, anyGuests, value);
   };
@@ -75,7 +71,6 @@ const onGuestsFilterSelectChange = (filterFunctions, anyGuests, value) => {
 
 
 
-/* фильтрация по удобствам */
 const filterByFeatures = (adData, checked, value) => {
   if (checked) {
     if (adData && adData.offer.features.includes(value)) {
@@ -87,7 +82,7 @@ const filterByFeatures = (adData, checked, value) => {
   return null;
 }
 
-const onFeaturesFilterSelectChange = (filterFunctions, checked, value) => {
+const showAdsByFeaturesFilter = (filterFunctions, checked, value) => {
   filterFunctions.features = (adData) => {
     return filterByFeatures(adData, checked, value);
   };
@@ -95,13 +90,12 @@ const onFeaturesFilterSelectChange = (filterFunctions, checked, value) => {
 }
 
 
-
 export {
-  onTypeFilterSelectChange,
-  onPriceFilterSelectChange,
-  onRoomsFilterSelectChange,
-  onGuestsFilterSelectChange,
-  onFeaturesFilterSelectChange
+  showAdsByTypeFilter,
+  showAdsByPriceFilter,
+  showAdsByRoomsFilter,
+  showAdsByGuestsFilter,
+  showAdsByFeaturesFilter
 };
 
 

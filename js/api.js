@@ -11,6 +11,7 @@ const getAdsFromServer = (onFailGetFetchAds) => {
     .then((response) => {
       if (response.ok) {
         return response.json();
+
       }
       throw new Error(`${response.status} ${response.statusText}`);
     })
@@ -18,6 +19,7 @@ const getAdsFromServer = (onFailGetFetchAds) => {
       onFailGetFetchAds('При загрузке данных с сервера произошла ошибка запроса');
     });
 }
+
 
 
 const postAdsToServer = (onSuccess, resetData, onFailPostFetchAds, body) => {

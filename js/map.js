@@ -1,4 +1,7 @@
-import {onMapLoad, onMainPinMoveEnd} from './map-functions.js';
+import {activateMap, getCoordinatesOfMainPin} from './map-functions.js';
+import {getAdsFromServer, showFailFetchAds} from './api.js';
+import {getSliceAdList} from './util.js';
+import {createAdPin} from './popup.js';
 
 const SYMBOLS_NUMBER = 5;
 const MAP_SCALE = 9;
@@ -22,6 +25,14 @@ const adForm = document.querySelector('.ad-form');
 const fields = adForm.querySelectorAll('fieldset');
 const mapFilter = document.querySelector('.map__filters');
 const popupAddressField = document.querySelector('#address');
+let adResponse;
+
+
+
+const getCopyAdResponse = () => {
+  return JSON.parse(JSON.stringify(adResponse));
+}
+
 
 
 adForm.classList.add('ad-form--disabled');
@@ -32,11 +43,19 @@ mapFilter.classList.add('map__filters--disabled');
 mapFilter.setAttribute('disabled', 'disabled');
 
 
+
 /* global L:readonly */
 const map = L.map('map-canvas')
-  /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
-    onMapLoad(adForm, fields, mapFilter, popupAddressField)
+    const getResponsePromise = getAdsFromServer(showFailFetchAds);
+    getResponsePromise.then((responseAd) => {
+      adResponse = responseAd;
+      const slicedArray = getSliceAdList(adResponse);
+      slicedArray.forEach((adDataParameter) => {
+        createAdPin(adDataParameter);
+      });
+      activateMap(adForm, fields, mapFilter, popupAddressField);
+    });
   })
   .setView({
     lat: OPENING_LAT,
@@ -44,7 +63,7 @@ const map = L.map('map-canvas')
   }, MAP_SCALE);
 
 
-/*создаем слой карты */
+
 L.tileLayer(
   TILE_LAYER,
   {
@@ -53,7 +72,7 @@ L.tileLayer(
 ).addTo(map);
 
 
-/* загружаем иконку для красного маркера */
+
 const mainPinIcon = L.icon({
   iconUrl: RED_ICON_URL,
   iconSize: [ICON_WIDTH, ICON_HEIGHT],
@@ -61,7 +80,7 @@ const mainPinIcon = L.icon({
 });
 
 
-/* задаем положение красного маркера */
+
 const mainPinMarker = L.marker(
   CENTER_COORDINATES,
   {
@@ -72,21 +91,23 @@ const mainPinMarker = L.marker(
 mainPinMarker.addTo(map);
 
 
-/* содержание поля с адресом по умолчанию - центр Токио */
+
 popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + mainPinMarker.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
 
 
-/* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
-// mainPinMarker.on('moveend', onMainPinMoveEnd);
-mainPinMarker.on('moveend', () => {
-  onMainPinMoveEnd(SYMBOLS_NUMBER, popupAddressField, mainPinMarker)
+
+mainPinMarker.on('move', () => {
+  getCoordinatesOfMainPin(SYMBOLS_NUMBER, popupAddressField, mainPinMarker)
 })
-/* загружаем иконку для синего маркера */
+
+
+
 const pinIcon = L.icon({
   iconUrl: BLUE_ICON_URL,
   iconSize: [ICON_WIDTH, ICON_HEIGHT],
   iconAnchor: [ICON_ANCHOR_WIDTH, ICON_ANCHOR_HEIGHT],
 });
+
 
 
 const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
@@ -106,4 +127,14 @@ const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
 }
 
 
-export {map, popupAddressField, pinIcon, mainPinMarker, createBalloon, MAP_SCALE, CENTER_COORDINATES};
+
+export {
+  map,
+  popupAddressField,
+  pinIcon,
+  mainPinMarker,
+  createBalloon,
+  MAP_SCALE,
+  CENTER_COORDINATES,
+  getCopyAdResponse
+};

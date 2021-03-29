@@ -1,11 +1,13 @@
 import {mainPinMarker, map, popupAddressField, MAP_SCALE} from './map.js';
-import {CENTER_COORDINATES} from './map.js'
-import {getCopyAdResponse, createAdPin} from './popup.js';
+import {CENTER_COORDINATES, getCopyAdResponse} from './map.js'
+import {createAdPin} from './popup.js';
+import {changeAttributeOfAdFormPrice, typeFormField} from './form.js';
 
 const ON_FAIL_SHOW_TIME = 5000;
 const adForm = document.querySelector('.ad-form');
 const filterForm = document.querySelector('.map__filters');
 const ADS_COUNT = 10;
+const mainContainer = document.querySelector('main');
 
 
 const addDataToField = (componentDom, data, field) => {
@@ -88,6 +90,7 @@ const removeAdMarkers = () => {
 
 const resetData = () => {
   adForm.reset();
+  changeAttributeOfAdFormPrice(typeFormField.value);
   resetMap(mainPinMarker, map, popupAddressField, CENTER_COORDINATES, MAP_SCALE);
   removeAdMarkers();
   filterForm.reset();
@@ -98,12 +101,12 @@ const resetData = () => {
 }
 
 
-const onFormSuccessSubmit = () => {
+const createSuccessPopup = () => {
   const successPostPopup = document.createElement('div');
   successPostPopup.setAttribute('id', 'successResponse');
   const successPostTemplate = document.querySelector('#success');
   successPostPopup.append(successPostTemplate.content.cloneNode(true));
-  document.body.append(successPostPopup);
+  mainContainer.append(successPostPopup);
   document.querySelector('.success').style.zIndex = '10000';
   successPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -112,13 +115,13 @@ const onFormSuccessSubmit = () => {
 }
 
 
-const onFailPostFetchAds = () => {
+const createFailPopup = () => {
   const failPostPopup = document.createElement('div');
   failPostPopup.setAttribute('id', 'fail');
-  const FailPostTemplate = document.querySelector('#error');
+  const failPostTemplate = document.querySelector('#error');
   const errorButton = document.querySelector('.error__button');
-  failPostPopup.append(FailPostTemplate.content.cloneNode(true));
-  document.body.append(failPostPopup);
+  failPostPopup.append(failPostTemplate.content.cloneNode(true));
+  mainContainer.append(failPostPopup);
   document.querySelector('.error').style.zIndex = '10000';
   failPostPopup.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -141,10 +144,11 @@ const getSliceAdList = (adDataList) => {
 export {
   addDataToField,
   showFailFetchAds,
-  onFormSuccessSubmit,
-  onFailPostFetchAds,
+  createSuccessPopup,
+  createFailPopup,
   resetData,
   getSliceAdList,
   removeAdMarkers,
-  onEscClick
+  onEscClick,
+  ADS_COUNT
 };

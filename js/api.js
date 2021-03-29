@@ -1,8 +1,7 @@
-import {onFailGetFetchAds} from './util.js';
+import {showFailFetchAds, onEscClick} from './util.js';
 
-export {getFetchAds, postFetchAds, onFailGetFetchAds};
 
-const getFetchAds = (onFailGetFetchAds) => {
+const getAdsFromServer = (onFailGetFetchAds) => {
   return fetch('https://22.javascript.pages.academy/keksobooking/data',
     {
       method: 'GET',
@@ -12,6 +11,7 @@ const getFetchAds = (onFailGetFetchAds) => {
     .then((response) => {
       if (response.ok) {
         return response.json();
+
       }
       throw new Error(`${response.status} ${response.statusText}`);
     })
@@ -20,7 +20,9 @@ const getFetchAds = (onFailGetFetchAds) => {
     });
 }
 
-const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
+
+
+const postAdsToServer = (onSuccess, resetData, onFailPostFetchAds, body) => {
   fetch('https://22.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
@@ -38,7 +40,8 @@ const postFetchAds = (onSuccess, resetData, onFailPostFetchAds, body) => {
     .catch(() => {
       onFailPostFetchAds();
     })
+  document.addEventListener('keydown', onEscClick);
 }
 
 
-
+export {getAdsFromServer, postAdsToServer, showFailFetchAds};

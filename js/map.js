@@ -1,62 +1,88 @@
-import {adDataList, domAdList} from './popup.js';
+import {activateMap, getCoordinatesOfMainPin} from './map-functions.js';
+import {getAdsFromServer, showFailFetchAds} from './api.js';
+import {getSliceAdList} from './util.js';
+import {createAdPin} from './popup.js';
 
-export {map, popupAddressField, pinIcon, createBalloon};
+const SYMBOLS_NUMBER = 5;
+const MAP_SCALE = 9;
+const OPENING_LAT = 35.68091;
+const OPENING_LNG = 139.76714;
+const ICON_HEIGHT = 52;
+const ICON_WIDTH = 52;
+const ICON_ANCHOR_HEIGHT = 52;
+const ICON_ANCHOR_WIDTH = 26;
+const RED_ICON_URL = './img/main-pin.svg';
+const BLUE_ICON_URL = './img/pin.svg';
+const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>';
+const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+const CENTER_COORDINATES = {
+  lat: 35.68951,
+  lng: 139.69201,
+};
 
 const adForm = document.querySelector('.ad-form');
-const fieldsetList = adForm.querySelectorAll('fieldset');
-const mapFilters = document.querySelector('.map__filters');
+const fields = adForm.querySelectorAll('fieldset');
+const mapFilter = document.querySelector('.map__filters');
 const popupAddressField = document.querySelector('#address');
-const SYMBOLS_NUMBER = 5;
+let adResponse;
+
+
+
+const getCopyAdResponse = () => {
+  return JSON.parse(JSON.stringify(adResponse));
+}
+
+
 
 adForm.classList.add('ad-form--disabled');
-fieldsetList.forEach(function (fieldset) {
+fields.forEach((fieldset) => {
   fieldset.setAttribute('disabled', 'disabled');
 });
+mapFilter.classList.add('map__filters--disabled');
+mapFilter.setAttribute('disabled', 'disabled');
 
-mapFilters.classList.add('map__filters--disabled');
-mapFilters.setAttribute('disabled', 'disabled');
 
 
 /* global L:readonly */
 const map = L.map('map-canvas')
-  /* возвращаем активное состояние формы при при загрузке карты */
   .on('load', () => {
-    adForm.classList.remove('ad-form--disabled');
-    fieldsetList.forEach(function (fieldset) {
-      fieldset.removeAttribute('disabled');
-      mapFilters.classList.remove('map__filters--disabled');
-      mapFilters.removeAttribute('disabled');
-      popupAddressField.setAttribute('readonly', 'readonly');
+    const getResponsePromise = getAdsFromServer(showFailFetchAds);
+    getResponsePromise.then((responseAd) => {
+      adResponse = responseAd;
+      const slicedArray = getSliceAdList(adResponse);
+      slicedArray.forEach((adDataParameter) => {
+        createAdPin(adDataParameter);
+      });
+      activateMap(adForm, fields, mapFilter, popupAddressField);
     });
   })
   .setView({
-    lat: 35.68091,
-    lng: 139.76714,
-  }, 9);
+    lat: OPENING_LAT,
+    lng: OPENING_LNG,
+  }, MAP_SCALE);
 
-/*создаем слой карты */
+
+
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  TILE_LAYER,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>',
+    attribution: COPYRIGHT,
   },
 ).addTo(map);
 
 
-/* загружаем иконку для красного маркера */
+
 const mainPinIcon = L.icon({
-  iconUrl: './img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: RED_ICON_URL,
+  iconSize: [ICON_WIDTH, ICON_HEIGHT],
+  iconAnchor: [ICON_ANCHOR_WIDTH, ICON_ANCHOR_HEIGHT],
 });
 
 
-/* задаем положение красного маркера */
+
 const mainPinMarker = L.marker(
-  {
-    lat: 35.68091,
-    lng: 139.76714,
-  },
+  CENTER_COORDINATES,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -65,43 +91,50 @@ const mainPinMarker = L.marker(
 mainPinMarker.addTo(map);
 
 
-/* содержание поля с адресом по умолчанию - центр Токио */
+
 popupAddressField.value = mainPinMarker.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + mainPinMarker.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
 
 
-/* вывод в поле с адресом новых координат, после того как пользователь закончил передвигать маркер*/
-mainPinMarker.on('moveend', (evt) => {
-  popupAddressField.value = evt.target.getLatLng().lat.toFixed(SYMBOLS_NUMBER) + ', ' + evt.target.getLatLng().lng.toFixed(SYMBOLS_NUMBER);
-});
+
+mainPinMarker.on('move', () => {
+  getCoordinatesOfMainPin(SYMBOLS_NUMBER, popupAddressField, mainPinMarker)
+})
 
 
-/* загружаем иконку для синего маркера */
+
 const pinIcon = L.icon({
-  iconUrl: './img/pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconUrl: BLUE_ICON_URL,
+  iconSize: [ICON_WIDTH, ICON_HEIGHT],
+  iconAnchor: [ICON_ANCHOR_WIDTH, ICON_ANCHOR_HEIGHT],
 });
 
-const createBalloon = () => {
-  adDataList.forEach((adData, i) => {
-    const marker = L.marker({
-      lat: adData.location.lat,
-      lng: adData.location.lng,
-    }, {
-      draggable: true,
-      icon: pinIcon,
-    });
 
 
-    marker.addTo(map)
-      .bindPopup(domAdList[i],
-        {
-          keepInView: true,
-        },
-      );
+const createBalloon = (latParameter, lngParameter, domAdCardParameter) => {
+  const marker = L.marker({
+    lat: latParameter,
+    lng: lngParameter,
+  }, {
+    icon: pinIcon,
   });
+  marker.addTo(map)
+    .bindPopup(domAdCardParameter,
+      {
+        keepInView: true,
+      },
+    )
+  marker._icon.classList.add('adPins');
 }
 
 
 
-
+export {
+  map,
+  popupAddressField,
+  pinIcon,
+  mainPinMarker,
+  createBalloon,
+  MAP_SCALE,
+  CENTER_COORDINATES,
+  getCopyAdResponse
+};
